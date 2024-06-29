@@ -19,6 +19,14 @@ public interface ItemDao {
     // get a list of items by season
     // return all item names
 
+    List<Item> getItemsByClassificationId(int classification);
+    // get a list of items by classification
+    // return all item names
+
+//    List<Item> getItemsByClassificationName(String name);
+    // get a list of items by classification
+    // return all item names
+
     List<Item> getItems();
     // @return all achievements from the database
     // if none in the database, return an empty list
@@ -27,12 +35,12 @@ public interface ItemDao {
     // list all the items needed for an achievement
     // returns a list of items
 
-    Item createItem();
+    Item createItem(Item item);
     // creates a new item
 
-    Item updateItem();
+    Item updateItem(Item item);
     // updates an item
 
-    int deleteItem();
+    int deleteItem(int id);
 
 }

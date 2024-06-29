@@ -79,10 +79,10 @@ public class JdbcAchievementDao implements AchievementDao {
     public Achievement updateAchievement(Achievement achievement) {
         Achievement updatedAchievement = null;
 
-        String sql = "INSERT INTO achievement (name, description) VALUES (?, ?) RETURNING achievement_id";
+        String sql = "UPDATE achievement (name, description) SET (?, ?) WHERE achievement_id = ?";
 
         try {
-            int rowsAffected = template.update(sql, achievement.getAchievementName(), achievement.getAchievementId());
+            int rowsAffected = template.update(sql, achievement.getAchievementName(), achievement.getAchievementDescription(), achievement.getAchievementId());
             if (rowsAffected == 0) {
                 throw new DaoException("Zero rows affected, expected at least one.");
             }
@@ -101,10 +101,8 @@ public class JdbcAchievementDao implements AchievementDao {
     @Override
     public int deleteAchievementById(int id) {
         int numberOfRows = 0;
-
         String deleteAchievementSql = "DELETE FROM achievement WHERE achievement_id = ?";
-        String updateAchievement = "UPDATE item SET achievement_id = 0 WHERE achievement_id = ?";
-
+        String updateAchievement = "UPDATE achievement_item SET achievement_id = 0 WHERE achievement_id = ?";
         try {
             template.update(updateAchievement, id);
             numberOfRows = template.update(deleteAchievementSql, id);

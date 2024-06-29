@@ -5,7 +5,7 @@ import java.util.Objects;
 public class Item {
 
     private int id;
-    private int type;
+    private int classification;
     private String name;
     private boolean completed;
     private String season;
@@ -15,10 +15,10 @@ public class Item {
     private String description;
     private int achievementId;
 
-    public Item(int id, int type, String name, boolean completed, String season,
+    public Item(int id, int classification, String name, boolean completed, String season,
                 String time, String weather, String location, String description, int achievementId) {
         this.id = id;
-        this.type = type;
+        this.classification = classification;
         this.name = name;
         this.completed = completed;
         this.season = season;
@@ -36,83 +36,83 @@ public class Item {
 
     public Item(){};
 
-    public int getId() {
+    public int getItemId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setItemId(int id) {
         this.id = id;
     }
 
-    public int getType() {
-        return type;
+    public int getItemClassification() {
+        return classification;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public void setItemClassification(int classification) {
+        this.classification = classification;
     }
 
-    public String getName() {
+    public String getItemName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setItemName(String name) {
         this.name = name;
     }
 
-    public boolean isCompleted() {
+    public boolean isItemCompleted() {
         return completed;
     }
 
-    public void setCompleted(boolean completed) {
+    public void setItemCompleted(boolean completed) {
         this.completed = completed;
     }
 
-    public String getSeason() {
+    public String getItemSeason() {
         return season;
     }
 
-    public void setSeason(String season) {
+    public void setItemSeason(String season) {
         this.season = season;
     }
 
-    public String getTime() {
+    public String getItemTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setItemTime(String time) {
         this.time = time;
     }
 
-    public String getWeather() {
+    public String getItemWeather() {
         return weather;
     }
 
-    public void setWeather(String weather) {
+    public void setItemWeather(String weather) {
         this.weather = weather;
     }
 
-    public String getLocation() {
+    public String getItemLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setItemLocation(String location) {
         this.location = location;
     }
 
-    public String getDescription() {
+    public String getItemDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setItemDescription(String description) {
         this.description = description;
     }
 
-    public int getAchievementId() {
+    public int getItemAchievementId() {
         return achievementId;
     }
 
-    public void setAchievementId(int achievementId) {
+    public void setItemAchievementId(int achievementId) {
         this.achievementId = achievementId;
     }
 
@@ -120,7 +120,7 @@ public class Item {
     public String toString() {
         return "Item{" +
                 "id=" + id +
-                ", type=" + type +
+                ", classification=" + classification +
                 ", name='" + name + '\'' +
                 ", completed=" + completed +
                 ", season='" + season + '\'' +
@@ -137,7 +137,7 @@ public class Item {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Item item = (Item) o;
-        return id == item.id && type == item.type && completed == item.completed &&
+        return id == item.id && classification == item.classification && completed == item.completed &&
                 achievementId == item.achievementId && Objects.equals(name, item.name) &&
                 Objects.equals(season, item.season) && Objects.equals(time, item.time) &&
                 Objects.equals(weather, item.weather) && Objects.equals(location, item.location) &&
@@ -146,6 +146,6 @@ public class Item {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, type, name, completed, season, time, weather, location, description, achievementId);
+        return Objects.hash(id, classification, name, completed, season, time, weather, location, description, achievementId);
     }
 }

@@ -19,19 +19,19 @@ public interface VillagerDao {
     // @return all villagers from the database
     // if none in the database, return an empty list
 
-    Villager getMarriageableVillagers();
+    Villager getMarriageableVillagers(Boolean marriageable);
     // get all the marriage candidates
     // return the villagers where marriage candidate = true
 
-    Villager createVillager();
+    Villager createVillager(Villager villager);
     // create a new villager
     // returns the new villager information
 
-    Villager updateVillager();
+    Villager updateVillager(Villager villager);
     // updates an existing villager
     // returns the updated villager information
 
-    int deleteVillager();
+    int deleteVillager(int id);
     // deletes a villager
     // returns the number deleted
 

@@ -1,6 +1,7 @@
 package org.minnerar.model;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class Villager {
@@ -10,8 +11,21 @@ public class Villager {
     private boolean marriageCandidate;
     private String birthday;
     private int heartCounter;
-    private String[] lovedGifts;
+    private List<String> lovedGifts;
     private String description;
+    private String loved1;
+    private String loved2;
+    private String loved3;
+    private String loved4;
+    private String loved5;
+    private String loved6;
+    private String loved7;
+    private String loved8;
+    private String loved9;
+    private String loved10;
+    private String loved11;
+    private String loved12;
+
 
     public int getVillagerId() {
         return id;
@@ -53,12 +67,23 @@ public class Villager {
         this.heartCounter = heartCounter;
     }
 
-    public String[] getVillagerLovedGifts() {
+    public List<String> getVillagerLovedGifts() {
         return lovedGifts;
     }
 
-    public void setVillagerLovedGifts(String[] lovedGifts) {
-        this.lovedGifts = lovedGifts;
+    public void setVillagerLovedGifts(List<String> lovedGifts) {
+        lovedGifts.add(loved1);
+        lovedGifts.add(loved2);
+        lovedGifts.add(loved3);
+        lovedGifts.add(loved4);
+        lovedGifts.add(loved5);
+        lovedGifts.add(loved6);
+        lovedGifts.add(loved7);
+        lovedGifts.add(loved8);
+        lovedGifts.add(loved9);
+        lovedGifts.add(loved10);
+        lovedGifts.add(loved11);
+        lovedGifts.add(loved12);
     }
 
     public String getVillagerDescription() {
@@ -77,11 +102,10 @@ public class Villager {
                 ", marriageCandidate=" + marriageCandidate +
                 ", birthday='" + birthday + '\'' +
                 ", heartCounter=" + heartCounter +
-                ", lovedGifts=" + Arrays.toString(lovedGifts) +
+                ", lovedGifts=" + lovedGifts +
                 ", description='" + description + '\'' +
                 '}';
     }
-
 
     @Override
     public boolean equals(Object o) {
@@ -90,14 +114,12 @@ public class Villager {
         Villager villager = (Villager) o;
         return id == villager.id && marriageCandidate == villager.marriageCandidate &&
                 heartCounter == villager.heartCounter && Objects.equals(name, villager.name) &&
-                Objects.equals(birthday, villager.birthday) && Arrays.equals(lovedGifts, villager.lovedGifts) &&
+                Objects.equals(birthday, villager.birthday) && Objects.equals(lovedGifts, villager.lovedGifts) &&
                 Objects.equals(description, villager.description);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(id, name, marriageCandidate, birthday, heartCounter, description);
-        result = 31 * result + Arrays.hashCode(lovedGifts);
-        return result;
+        return Objects.hash(id, name, marriageCandidate, birthday, heartCounter, lovedGifts, description);
     }
 }
