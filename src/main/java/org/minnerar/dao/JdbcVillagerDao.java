@@ -103,7 +103,6 @@ public class JdbcVillagerDao implements VillagerDao {
     @Override
     public Villager updateVillager(Villager villager) {
         Villager updatedVillager = null;
-
         String sql = "UPDATE villager (villager_id, name, marriage_candidate, birthday, loved1, loved2, loved3, loved4, " +
                 "loved5, loved6, loved7, loved8, loved9, loved10, loved11, loved12, description)" +
                 "SET (?, ?, ?, ?, ?, ?, ?, ?, " +
@@ -131,9 +130,7 @@ public class JdbcVillagerDao implements VillagerDao {
     @Override
     public int deleteVillager(int id) {
         int numberOfRows = 0;
-
         String deleteVillagerSql = "DELETE FROM villager WHERE villager_id = ?";
-        // TODO: FIX THIS
 
         try {
             numberOfRows = template.update(deleteVillagerSql, id);

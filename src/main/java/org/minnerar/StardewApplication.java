@@ -27,6 +27,7 @@ public class StardewApplication {
     private static final String MAIN_MENU_OPTION_ADD_ACHIEVEMENT = "Add Achievement to Track";
     private static final String MAIN_MENU_OPTION_VILLAGER = "Villager Menu";
     private static final String MAIN_MENU_OPTION_ITEM = "Item Menu";
+    private static final String MAIN_MENU_OPTION_CLASSIFICATION = "Classification Menu";
     private static final String MAIN_MENU_OPTION_EXIT = "Exit";
     private static final String[] MAIN_MENU_OPTIONS = new String[]{
             MAIN_MENU_OPTION_ACHIEVEMENTS,
@@ -34,6 +35,7 @@ public class StardewApplication {
             MAIN_MENU_OPTION_ADD_ACHIEVEMENT,
             MAIN_MENU_OPTION_VILLAGER,
             MAIN_MENU_OPTION_ITEM,
+            MAIN_MENU_OPTION_CLASSIFICATION,
             MAIN_MENU_OPTION_EXIT
     };
 
@@ -118,18 +120,35 @@ public class StardewApplication {
             ACHIEVEMENT_MENU_OPTION_RETURN_TO_MAIN
     } ;
 
-    private static final String ITEM_DISPLAY_MENU_SHOW_ALL = "Show All Requirements";
-    private static final String ITEM_DISPLAY_MENU_SHOW_MISSING = "Show Missing Requirements";
-    private static final String ITEM_DISPLAY_MENU_COMPLETED = "Show Completed Requirements";
+    private static final String ITEM_DISPLAY_MENU_SHOW_ALL = "Show All Items";
+    private static final String ITEM_DISPLAY_MENU_SHOW_MISSING = "Show Missing Items";
+    private static final String ITEM_DISPLAY_MENU_COMPLETED = "Show Found Items";
     private static final String ITEM_DISPLAY_BY_CLASSIFICATION = "Show All Items by Classification";
+    private static final String ITEM_DISPLAY_ADD_ITEM = "Add an Item";
+    private static final String ITEM_DISPLAY_UPDATED_ITEM = "Update an Item";
+    private static final String ITEM_DISPLAY_DELETE_ITEM = "Delete an Item";
     private static final String[] ITEM_DISPLAY_MENU = new String[]{
             ITEM_DISPLAY_MENU_SHOW_ALL,
             ITEM_DISPLAY_MENU_SHOW_MISSING,
             ITEM_DISPLAY_MENU_COMPLETED,
             ITEM_DISPLAY_BY_CLASSIFICATION,
+            ITEM_DISPLAY_ADD_ITEM,
+            ITEM_DISPLAY_UPDATED_ITEM,
+            ITEM_DISPLAY_DELETE_ITEM,
             ACHIEVEMENT_MENU_OPTION_RETURN_TO_MAIN
     };
 
+    private static final String CLASSIFICATION_DISPLAY_MENU_SHOW_ALL = "Show All Classifications";
+    private static final String CLASSIFICATION_DISPLAY_MENU_ADD = "Add a Classification";
+    private static final String CLASSIFICATION_DISPLAY_MENU_UPDATE = "Update a Classification";
+    private static final String CLASSIFICATION_DISPLAY_MENU_DELETE = "Delete a Classification";
+    private static final String[] CLASSIFICATION_DISPLAY_MENU = new String[] {
+            CLASSIFICATION_DISPLAY_MENU_SHOW_ALL,
+            CLASSIFICATION_DISPLAY_MENU_ADD,
+            CLASSIFICATION_DISPLAY_MENU_UPDATE,
+            CLASSIFICATION_DISPLAY_MENU_DELETE,
+            ACHIEVEMENT_MENU_OPTION_RETURN_TO_MAIN
+    };
 //    private final DataSource dataSource;
 //    private final JdbcTemplate template;
 
@@ -174,6 +193,8 @@ public class StardewApplication {
                 handleVillager(); // handle the villager option in another menu
             } else if (choice.equals(MAIN_MENU_OPTION_ITEM)) {
                 handleItem(); // handle the item option in another menu
+            } else if (choice.equals(MAIN_MENU_OPTION_CLASSIFICATION)) {
+                handleClassification(); // handle the classification option in another menu
             } else if (choice.equals(MAIN_MENU_OPTION_EXIT)) {
                 running = false;
             }
@@ -439,9 +460,117 @@ public class StardewApplication {
 
     // ALL ITEM METHODS
     private void handleItem() {
+        try {
+            System.out.println("Villager Menu Options");
+            String choice = (String)Menu.getChoiceFromOptions(ITEM_DISPLAY_MENU);
+            if(choice.equals(ITEM_DISPLAY_MENU_SHOW_ALL)) {
+
+            } else if(choice.equals(ITEM_DISPLAY_MENU_SHOW_MISSING)) {
+
+            } else if(choice.equals(ITEM_DISPLAY_MENU_COMPLETED)) {
+
+            } else if(choice.equals(ITEM_DISPLAY_BY_CLASSIFICATION)) {
+
+            } else if(choice.equals(ITEM_DISPLAY_ADD_ITEM)) {
+
+            } else if(choice.equals(ITEM_DISPLAY_UPDATED_ITEM)) {
+
+            } else if(choice.equals(ITEM_DISPLAY_DELETE_ITEM)) {
+
+            } else if(choice.equals(ACHIEVEMENT_MENU_OPTION_RETURN_TO_MAIN)) {
+                // TODO: HOW DO I DO THIS?
+            }
+        } catch (DaoException e) {
+            System.out.println("Error occurred: " + e.getMessage());
+        }
+    }
+
+    private void handleDisplayAllItems() {
 
     }
 
+    private void handleDisplayMissingItems() {
+
+    }
+
+    private void handleDisplayCompletedItems() {
+
+    }
+
+    private void handleDisplayItemsByClassification() {
+
+    }
+
+    private void handleAddItem() {
+
+    }
+
+    private void handleUpdateItem() {
+
+    }
+
+    private void handleDeleteItem() {
+
+    }
+
+    // ALL CLASSIFICATION METHODS
+    private void handleClassification() {
+        try {
+            System.out.println("Classification Menu Options");
+            String choice = (String)Menu.getChoiceFromOptions(CLASSIFICATION_DISPLAY_MENU);
+            if(choice.equals(CLASSIFICATION_DISPLAY_MENU_SHOW_ALL)) {
+
+            } else if(choice.equals(CLASSIFICATION_DISPLAY_MENU_ADD)) {
+
+            } else if(choice.equals(CLASSIFICATION_DISPLAY_MENU_UPDATE)) {
+
+            } else if(choice.equals(CLASSIFICATION_DISPLAY_MENU_DELETE)) {
+
+            } else if(choice.equals(ACHIEVEMENT_MENU_OPTION_RETURN_TO_MAIN)) {
+                // TODO: HOW DO I DO THIS?
+            }
+        } catch (DaoException e) {
+            System.out.println("Error occurred: " + e.getMessage());
+        }
+    }
+
+    private void handleDisplayAllClassifications() {
+
+    }
+
+
+    private void handleListAllVillagers() {
+        System.out.println("All Villagers");
+        System.out.println("--------------------------");
+        List<Villager> allVillagers = villagerDao.getVillagers();
+        listAllVillagers(allVillagers);
+    }
+
+    private void listAllVillagers(List<Villager> villagers) {
+        if(villagers.size() > 0) {
+            for(Villager villager : villagers) {
+                System.out.println(villager);
+            }
+        } else {
+            System.out.println("\n*** No results ***");
+        }
+    }
+
+
+    private void handleAddClassification() {
+
+    }
+
+    private void handleUpdateClassification() {
+
+    }
+
+    private void handleDeleteClassification() {
+
+    }
+
+
+    // HANDLE USER INPUT
     private String getUserInput(String prompt) {
         System.out.print(prompt + " >>> ");
         return new Scanner(System.in).nextLine();
