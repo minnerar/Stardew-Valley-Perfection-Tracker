@@ -11,6 +11,11 @@ public class JdbcVillagerDao implements VillagerDao {
     }
 
     @Override
+    public Villager getVillagerByName(String name) {
+        return null;
+    }
+
+    @Override
     public List<Villager> getVillagers() {
         return null;
     }
@@ -18,5 +23,20 @@ public class JdbcVillagerDao implements VillagerDao {
     @Override
     public Villager getMarriageableVillagers() {
         return null;
+    }
+
+    @Override
+    public Villager createVillager() {
+        return null;
+    }
+
+    @Override
+    public Villager updateVillager() {
+        return null;
+    }
+
+    @Override
+    public int deleteVillager() {
+        return 0;
     }
 }

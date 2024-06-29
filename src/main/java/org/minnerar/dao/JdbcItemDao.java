@@ -29,4 +29,19 @@ public class JdbcItemDao implements ItemDao {
     public List<Item> getItemsByAchievementId(int id) {
         return null;
     }
+
+    @Override
+    public Item createItem() {
+        return null;
+    }
+
+    @Override
+    public Item updateItem() {
+        return null;
+    }
+
+    @Override
+    public int deleteItem() {
+        return 0;
+    }
 }

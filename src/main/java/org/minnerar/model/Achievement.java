@@ -1,5 +1,7 @@
 package org.minnerar.model;
 
+import java.util.Objects;
+
 public class Achievement {
 
     private int id;
@@ -64,4 +66,30 @@ public class Achievement {
         return ((double)current / totalNeeded);
     }
 
+    @Override
+    public String toString() {
+        return "Achievement{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", totalNeeded=" + totalNeeded +
+                ", current=" + current +
+                ", description='" + description + '\'' +
+                ", progress=" + progress +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Achievement that = (Achievement) o;
+        return id == that.id && totalNeeded == that.totalNeeded &&
+                current == that.current && Double.compare(that.progress, progress) == 0 &&
+                Objects.equals(name, that.name) && Objects.equals(description, that.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, totalNeeded, current, description, progress);
+    }
 }

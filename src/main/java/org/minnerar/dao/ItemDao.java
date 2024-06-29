@@ -27,4 +27,12 @@ public interface ItemDao {
     // list all the items needed for an achievement
     // returns a list of items
 
+    Item createItem();
+    // creates a new item
+
+    Item updateItem();
+    // updates an item
+
+    int deleteItem();
+
 }

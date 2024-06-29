@@ -1,20 +1,22 @@
 package org.minnerar;
 
-import org.apache.commons.dbcp2.BasicDataSource;
+//import org.apache.commons.dbcp2.BasicDataSource;
+//idk what that is, but it's red -- ASK SOMEONE
+import org.minnerar.dao.JdbcAchievementDao;
+import org.minnerar.dao.JdbcItemDao;
+import org.minnerar.dao.JdbcVillagerDao;
+import org.minnerar.exception.DaoException;
 import org.minnerar.view.Menu;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Scanner;
-import javax.sql.DataSource;
-
-public class Main {
+public class StardewApplication {
 
     private static final String MAIN_MENU_OPTION_ACHIEVEMENTS = "Achievements";
     private static final String MAIN_MENU_OPTION_CHECK_PROGRESS = "Check Progress";
     private static final String MAIN_MENU_OPTION_ADD_ACHIEVEMENT = "Add Achievement to Track";
     private static final String MAIN_MENU_OPTION_EXIT = "Exit";
-    private static final String[] MAIN_MENU_OPTIONS = new String[] {
+    private static final String[] MAIN_MENU_OPTIONS = new String[]{
             MAIN_MENU_OPTION_ACHIEVEMENTS,
             MAIN_MENU_OPTION_CHECK_PROGRESS,
             MAIN_MENU_OPTION_ADD_ACHIEVEMENT,
@@ -26,7 +28,7 @@ public class Main {
     private static final String ACHIEVEMENT_MENU_OPTION_UPDATE_PROGRESS = "Update Progress";
     private static final String ACHIEVEMENT_MENU_OPTION_DELETE_ACHIEVEMENT = "Delete Achievement from Tracking";
     private static final String ACHIEVEMENT_MENU_OPTION_RETURN_TO_MAIN = "Return to Main Menu";
-    private static final String [] ACHIEVEMENT_MENU_OPTIONS = new String[] {
+    private static final String[] ACHIEVEMENT_MENU_OPTIONS = new String[]{
             ACHIEVEMENT_MENU_OPTION_DESCRIPTION,
             ACHIEVEMENT_MENU_OPTION_REQUIREMENTS,
             ACHIEVEMENT_MENU_OPTION_UPDATE_PROGRESS,
@@ -45,7 +47,7 @@ public class Main {
     private static final String ACHIEVEMENT_LIST_MENU_OPTION_CRAFTING = "All Crafting Recipes Made";
     private static final String ACHIEVEMENT_LIST_MENU_OPTION_FISH = "All Fish Caught";
     private static final String ACHIEVEMENT_LIST_MENU_OPTION_GOLDEN_WALNUTS = "All Golden Walnuts Found";
-    private static final String[] ACHIEVEMENT_LIST_MENU_OPTIONS = new String[] {
+    private static final String[] ACHIEVEMENT_LIST_MENU_OPTIONS = new String[]{
             ACHIEVEMENT_LIST_MENU_OPTION_PRODUCE_AND_FORAGE,
             ACHIEVEMENT_LIST_MENU_OPTION_OBELISKS,
             ACHIEVEMENT_LIST_MENU_OPTION_GOLDEN_CLOCK,
@@ -71,7 +73,7 @@ public class Main {
     private static final String ACHIEVEMENT_REQUIREMENTS_MENU_VILLAGER = "Villager";
     private static final String ACHIEVEMENT_REQUIREMENTS_MENU_MINERAL = "Mineral";
     private static final String ACHIEVEMENT_REQUIREMENTS_MENU_ARTIFACT = "Artifact";
-    private static final String[] ACHIEVEMENT_REQUIREMENTS_MENU = new String[] {
+    private static final String[] ACHIEVEMENT_REQUIREMENTS_MENU = new String[]{
             ACHIEVEMENT_REQUIREMENTS_MENU_FRUIT,
             ACHIEVEMENT_REQUIREMENTS_MENU_VEGETABLE,
             ACHIEVEMENT_REQUIREMENTS_MENU_COOKING,
@@ -89,21 +91,30 @@ public class Main {
     private static final String ITEM_DISPLAY_MENU_SHOW_ALL = "Show All Requirements";
     private static final String ITEM_DISPLAY_MENU_SHOW_MISSING = "Show Missing Requirements";
     private static final String ITEM_DISPLAY_MENU_COMPLETED = "Show Completed Requirements";
-    private static final String [] ITEM_DISPLAY_MENU = new String[] {
+    private static final String[] ITEM_DISPLAY_MENU = new String[]{
             ITEM_DISPLAY_MENU_SHOW_ALL,
             ITEM_DISPLAY_MENU_SHOW_MISSING,
             ITEM_DISPLAY_MENU_COMPLETED,
             ACHIEVEMENT_MENU_OPTION_RETURN_TO_MAIN
     };
 
+//    private final DataSource dataSource;
+//    private final JdbcTemplate template;
+
+    private final JdbcAchievementDao achievementDao;
+    private final JdbcItemDao itemDao;
+    private final JdbcVillagerDao villagerDao;
+
+    @Autowired
+    public StardewApplication(JdbcAchievementDao achievementDao, JdbcItemDao itemDao, JdbcVillagerDao villagerDao) {
+//        this.dataSource = dataSource;
+        this.achievementDao = achievementDao;
+        this.itemDao = itemDao;
+        this.villagerDao = villagerDao;
+    }
 
     public static void main(String[] args) {
-        BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/EmployeeProjects");
-        dataSource.setUsername("postgres");
-        dataSource.setPassword("postgres1");
-
-        run();
+        SpringApplication.run(StardewApplication.class, args);
     }
 
     private void initialize() {
@@ -118,21 +129,29 @@ public class Main {
         Menu menu = new Menu(System.in, System.out);
 
         boolean running = true;
-        while(running) {
-            String choice = (String)menu.getChoiceFromOptions(MAIN_MENU_OPTIONS);
-            if(choice.equals(MAIN_MENU_OPTION_ACHIEVEMENTS)) {
+        while (running) {
+            String choice = (String) menu.getChoiceFromOptions(MAIN_MENU_OPTIONS);
+            if (choice.equals(MAIN_MENU_OPTION_ACHIEVEMENTS)) {
                 // create a handle achievements method
-            } else if(choice.equals(MAIN_MENU_OPTION_CHECK_PROGRESS)) {
+            } else if (choice.equals(MAIN_MENU_OPTION_CHECK_PROGRESS)) {
                 // create a handle check progress method
-            } else if(choice.equals(MAIN_MENU_OPTION_ADD_ACHIEVEMENT)) {
+            } else if (choice.equals(MAIN_MENU_OPTION_ADD_ACHIEVEMENT)) {
                 // create a handle add achievement method
-            } else if(choice.equals(MAIN_MENU_OPTION_EXIT)) {
+            } else if (choice.equals(MAIN_MENU_OPTION_EXIT)) {
                 running = false;
             }
         }
 
     }
 
+    private void handleAchievements() {
+        try {
+            System.out.println("Achievements");
+
+        } catch (DaoException e) {
+            System.out.println("Error occurred: " + e.getMessage());
+        }
 
 
+    }
 }

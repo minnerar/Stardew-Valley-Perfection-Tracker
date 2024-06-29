@@ -1,5 +1,8 @@
 package org.minnerar.model;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 public class Villager {
 
     private int id;
@@ -64,5 +67,37 @@ public class Villager {
 
     public void setVillagerDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "Villager{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", marriageCandidate=" + marriageCandidate +
+                ", birthday='" + birthday + '\'' +
+                ", heartCounter=" + heartCounter +
+                ", lovedGifts=" + Arrays.toString(lovedGifts) +
+                ", description='" + description + '\'' +
+                '}';
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Villager villager = (Villager) o;
+        return id == villager.id && marriageCandidate == villager.marriageCandidate &&
+                heartCounter == villager.heartCounter && Objects.equals(name, villager.name) &&
+                Objects.equals(birthday, villager.birthday) && Arrays.equals(lovedGifts, villager.lovedGifts) &&
+                Objects.equals(description, villager.description);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(id, name, marriageCandidate, birthday, heartCounter, description);
+        result = 31 * result + Arrays.hashCode(lovedGifts);
+        return result;
     }
 }

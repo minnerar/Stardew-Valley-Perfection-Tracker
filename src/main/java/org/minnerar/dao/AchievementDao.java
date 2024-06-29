@@ -22,7 +22,7 @@ public interface AchievementDao {
     // removes an achievement from the database
     // returns the number of updated achievements
 
-    Achievement deleteAchievementById(int id);
+    int deleteAchievementById(int id);
     // deletes an achievement from the database
     // returns the number of deleted achievements
 
