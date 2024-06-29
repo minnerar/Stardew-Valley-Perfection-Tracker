@@ -2,12 +2,11 @@ package org.minnerar;
 
 //import org.apache.commons.dbcp2.BasicDataSource;
 //idk what that is, but it's red -- ASK SOMEONE
-import org.minnerar.dao.AchievementDao;
-import org.minnerar.dao.JdbcAchievementDao;
-import org.minnerar.dao.JdbcItemDao;
-import org.minnerar.dao.JdbcVillagerDao;
+import org.minnerar.dao.*;
 import org.minnerar.exception.DaoException;
 import org.minnerar.model.Achievement;
+import org.minnerar.model.Classification;
+import org.minnerar.model.Item;
 import org.minnerar.model.Villager;
 import org.minnerar.view.Menu;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -155,13 +154,15 @@ public class StardewApplication {
     private final JdbcAchievementDao achievementDao;
     private final JdbcItemDao itemDao;
     private final JdbcVillagerDao villagerDao;
+    private final JdbcClassificationDao classificationDao;
 
     @Autowired
-    public StardewApplication(JdbcAchievementDao achievementDao, JdbcItemDao itemDao, JdbcVillagerDao villagerDao) {
+    public StardewApplication(JdbcAchievementDao achievementDao, JdbcItemDao itemDao, JdbcVillagerDao villagerDao, JdbcClassificationDao classificationDao) {
 //        this.dataSource = dataSource;
         this.achievementDao = achievementDao;
         this.itemDao = itemDao;
         this.villagerDao = villagerDao;
+        this.classificationDao = classificationDao;
     }
 
     public static void main(String[] args) {
@@ -398,22 +399,36 @@ public class StardewApplication {
         System.out.println("--------------------------");
 
         Villager newVillager = new Villager();
-        String villagerName = getUserInput("Enter the name of the new Villager.");
-        String marriageCandidate = getUserInput("Is the villager a marriage candidate? YES or NO");
-        String birthday = getUserInput("Enter the new Villager's birthday.");
-        String lovedGiftString = getUserInput("Enter up to 12 things the villager loves (minimum 2), separated by a comma.");
-        String description = getUserInput("Enter a description for the villager.");
-
-        newVillager.setVillagerName(villagerName);
-        boolean status = false;
-        if (marriageCandidate.equalsIgnoreCase("YES")) {
-            status = true;
+        String villagerName = getUserInput("Enter the name of the new Villager." +
+                "\nLeave blank to skip.");
+        String marriageCandidate = getUserInput("Is the villager a marriage candidate? YES or NO" +
+                "\nLeave blank to skip.");
+        String birthday = getUserInput("Enter the new Villager's birthday." +
+                "\nLeave blank to skip.");
+        String lovedGiftString = getUserInput("Enter up to 12 things the villager loves (minimum 2), separated by a comma." +
+                "\nLeave blank to skip.");
+        String description = getUserInput("Enter a description for the villager." +
+                "\nLeave blank to skip.");
+        if (!villagerName.equals("")) {
+            newVillager.setVillagerName(villagerName);
         }
-        newVillager.setVillagerMarriageCandidate(status);
-        newVillager.setVillagerBirthday(birthday);
-        List<String> lovedGifts = new ArrayList<>(List.of(lovedGiftString.split(",")));
-        newVillager.setVillagerLovedGifts(lovedGifts);
-        newVillager.setVillagerDescription(description);
+        if (!marriageCandidate.equals("")) {
+            boolean status = false;
+            if (marriageCandidate.equalsIgnoreCase("YES")) {
+                status = true;
+            }
+            newVillager.setVillagerMarriageCandidate(status);
+        }
+        if (!birthday.equals("")) {
+            newVillager.setVillagerBirthday(birthday);
+        }
+        if (!lovedGiftString.equals("")) {
+            List<String> lovedGifts = new ArrayList<>(List.of(lovedGiftString.split(",")));
+            newVillager.setVillagerLovedGifts(lovedGifts);
+        }
+        if (!description.equals("")) {
+            newVillager.setVillagerDescription(description);
+        }
         System.out.println("\n" + newVillager.getVillagerName() + " added to the list of Villagers!");
     }
 
@@ -441,8 +456,10 @@ public class StardewApplication {
                 selectedVillager.setVillagerMarriageCandidate(false);
             }
         }
-        List<String> lovedGifts = new ArrayList<>(List.of(updatedLovedGifts.split(",")));
-        selectedVillager.setVillagerLovedGifts(lovedGifts);
+        if (!updatedLovedGifts.equals("")) {
+            List<String> lovedGifts = new ArrayList<>(List.of(updatedLovedGifts.split(",")));
+            selectedVillager.setVillagerLovedGifts(lovedGifts);
+        }
         if (!description.equals("")) {
             selectedVillager.setVillagerDescription(description);
         }
@@ -464,19 +481,19 @@ public class StardewApplication {
             System.out.println("Villager Menu Options");
             String choice = (String)Menu.getChoiceFromOptions(ITEM_DISPLAY_MENU);
             if(choice.equals(ITEM_DISPLAY_MENU_SHOW_ALL)) {
-
+                handleDisplayAllItems(); // display all items
             } else if(choice.equals(ITEM_DISPLAY_MENU_SHOW_MISSING)) {
-
+                handleDisplayMissingItems(); // displays all the missing items
             } else if(choice.equals(ITEM_DISPLAY_MENU_COMPLETED)) {
-
+                handleDisplayCompletedItems(); // displays all the completed items
             } else if(choice.equals(ITEM_DISPLAY_BY_CLASSIFICATION)) {
-
+                handleDisplayItemsByClassification(); // displays the items by classification
             } else if(choice.equals(ITEM_DISPLAY_ADD_ITEM)) {
-
+                handleAddItem(); // add an item
             } else if(choice.equals(ITEM_DISPLAY_UPDATED_ITEM)) {
-
+                handleUpdateItem(); // update an item
             } else if(choice.equals(ITEM_DISPLAY_DELETE_ITEM)) {
-
+                handleDeleteItem(); // delete an item
             } else if(choice.equals(ACHIEVEMENT_MENU_OPTION_RETURN_TO_MAIN)) {
                 // TODO: HOW DO I DO THIS?
             }
@@ -485,32 +502,186 @@ public class StardewApplication {
         }
     }
 
-    private void handleDisplayAllItems() {
+    private Item getItemSelectionFromUser() {
+        System.out.println("Choose a Villager:");
+        List<Item> allItems = itemDao.getItems();
+        return (Item) Menu.getChoiceFromOptions(allItems.toArray());
+    }
 
+    private void handleDisplayAllItems() {
+        System.out.println("All Items");
+        System.out.println("--------------------------");
+        List<Item> allItems = itemDao.getItems();
+        if (allItems.size() > 0) {
+            for (Item item : allItems) {
+                System.out.println(item);
+            }
+        } else {
+            System.out.println("\n*** No results ***");
+        }
     }
 
     private void handleDisplayMissingItems() {
-
+        List<Item> items = itemDao.getItems();
+        if(items.size() > 0) {
+            for(Item item : items) {
+                if (!item.isItemCompleted()) {
+                    System.out.println(item);
+                }
+            }
+        } else {
+            System.out.println("\n*** No results ***");
+        }
     }
 
     private void handleDisplayCompletedItems() {
-
+        List<Item> items = itemDao.getItems();
+        if(items.size() > 0) {
+            for(Item item : items) {
+                if (item.isItemCompleted()) {
+                    System.out.println(item);
+                }
+            }
+        } else {
+            System.out.println("\n*** No results ***");
+        }
     }
 
     private void handleDisplayItemsByClassification() {
+        Classification classification = getClassificationSelectionFromUser();
 
+        List<Item> items = itemDao.getItems();
+        if(items.size() > 0) {
+            for(Item item : items) {
+                if (item.getItemClassification() == classification.getId()) {
+                    System.out.println(item);
+                }
+            }
+        } else {
+            System.out.println("\n*** No results ***");
+        }
     }
 
     private void handleAddItem() {
+        System.out.println("Add a New Item the list!");
+        System.out.println("--------------------------");
 
+        Item newItem = new Item();
+        String itemName = getUserInput("Enter the name of the new item." +
+                "\nLeave blank to skip.");
+        String classification = getUserInput("Enter the classification id for the new item" +
+                "\nLeave blank to skip.");
+        String completed = getUserInput("Enter whether or not the item is completed. YES OR NO" +
+                "\nLeave blank to skip.");
+        String season = getUserInput("Enter the season the item is found during." +
+                "\nLeave blank to skip.");
+        String time = getUserInput("Enter the time of day the item is found during." +
+                "\nLeave blank to skip.");
+        String weather = getUserInput("Enter the weather the item is found during." +
+                "\nLeave blank to skip.");
+        String location = getUserInput("Enter the location the item is found at." +
+                "\nLeave blank to skip.");
+        String description = getUserInput("Enter a description for the villager." +
+                "\nLeave blank to skip.");
+        String achievementId = getUserInput("Enter the associated achievement id for the item." +
+                "\nLeave blank to skip.");
+        if (!itemName.equals("")) {
+            newItem.setItemName(itemName);
+        }
+        if (!classification.equals("")) {
+            newItem.setItemClassification(Integer.parseInt(classification));
+        }
+        if (!completed.equals("")) {
+            if (completed.equalsIgnoreCase("yes")) {
+                newItem.setItemCompleted(true);
+            } else if (completed.equalsIgnoreCase("no")){
+                newItem.setItemCompleted(false);
+            }
+        }
+        if (!season.equals("")) {
+            newItem.setItemSeason(season);
+        }
+        if (!time.equals("")) {
+            newItem.setItemTime(time);
+        }
+        if (!weather.equals("")) {
+            newItem.setItemWeather(weather);
+        }
+        if (!location.equals("")) {
+            newItem.setItemLocation(location);
+        }
+        if (!description.equals("")) {
+            newItem.setItemDescription(description);
+        }
+        if (!achievementId.equals("")) {
+            newItem.setItemAchievementId(Integer.parseInt(achievementId));
+        }
+        System.out.println("\n" + newItem.getItemName() + " added to the list of items!");
     }
 
     private void handleUpdateItem() {
+        System.out.println("Update an Item on the list!");
+        System.out.println("--------------------------");
 
+        Item newItem = new Item();
+        String itemName = getUserInput("Enter the updated name of the item." +
+                "\nLeave blank to skip.");
+        String classification = getUserInput("Enter the classification id for the item" +
+                "\nLeave blank to skip.");
+        String completed = getUserInput("Update whether or not the item is completed. YES OR NO" +
+                "\nLeave blank to skip.");
+        String season = getUserInput("Enter the updated season the item is found during." +
+                "\nLeave blank to skip.");
+        String time = getUserInput("Enter the updated time of day the item is found during." +
+                "\nLeave blank to skip.");
+        String weather = getUserInput("Enter the updated weather the item is found during." +
+                "\nLeave blank to skip.");
+        String location = getUserInput("Enter the updated location the item is found at." +
+                "\nLeave blank to skip.");
+        String description = getUserInput("Enter an updated description for the villager." +
+                "\nLeave blank to skip.");
+        String achievementId = getUserInput("Enter the updated associated achievement id for the item." +
+                "\nLeave blank to skip.");
+        if (!itemName.equals("")) {
+            newItem.setItemName(itemName);
+        }
+        if (!classification.equals("")) {
+            newItem.setItemClassification(Integer.parseInt(classification));
+        }
+        if (!completed.equals("")) {
+            if (completed.equalsIgnoreCase("yes")) {
+                newItem.setItemCompleted(true);
+            } else if (completed.equalsIgnoreCase("no")){
+                newItem.setItemCompleted(false);
+            }
+        }
+        if (!season.equals("")) {
+            newItem.setItemSeason(season);
+        }
+        if (!time.equals("")) {
+            newItem.setItemTime(time);
+        }
+        if (!weather.equals("")) {
+            newItem.setItemWeather(weather);
+        }
+        if (!location.equals("")) {
+            newItem.setItemLocation(location);
+        }
+        if (!description.equals("")) {
+            newItem.setItemDescription(description);
+        }
+        if (!achievementId.equals("")) {
+            newItem.setItemAchievementId(Integer.parseInt(achievementId));
+        }
+        System.out.println("\n" + newItem.getItemName() + " added to the list of items!");
     }
 
     private void handleDeleteItem() {
+        System.out.println("Delete a Villager");
+        Item itemToDelete = getItemSelectionFromUser();
 
+        itemDao.deleteItem(itemToDelete.getItemId());
+        System.out.println("\n" + itemToDelete.getItemName() + " has been deleted!");
     }
 
     // ALL CLASSIFICATION METHODS
@@ -519,13 +690,13 @@ public class StardewApplication {
             System.out.println("Classification Menu Options");
             String choice = (String)Menu.getChoiceFromOptions(CLASSIFICATION_DISPLAY_MENU);
             if(choice.equals(CLASSIFICATION_DISPLAY_MENU_SHOW_ALL)) {
-
+                handleDisplayAllClassifications(); // list all the classifications
             } else if(choice.equals(CLASSIFICATION_DISPLAY_MENU_ADD)) {
-
+                handleAddClassification(); // add a classification
             } else if(choice.equals(CLASSIFICATION_DISPLAY_MENU_UPDATE)) {
-
+                handleUpdateClassification(); // update a classification
             } else if(choice.equals(CLASSIFICATION_DISPLAY_MENU_DELETE)) {
-
+                handleDeleteClassification(); // delete a classification
             } else if(choice.equals(ACHIEVEMENT_MENU_OPTION_RETURN_TO_MAIN)) {
                 // TODO: HOW DO I DO THIS?
             }
@@ -534,39 +705,57 @@ public class StardewApplication {
         }
     }
 
+    private Classification getClassificationSelectionFromUser() {
+        System.out.println("Choose a Classification:");
+        List<Classification> allClassifications = classificationDao.getClassifications();
+        return (Classification) Menu.getChoiceFromOptions(allClassifications.toArray());
+    }
+
     private void handleDisplayAllClassifications() {
-
-    }
-
-
-    private void handleListAllVillagers() {
-        System.out.println("All Villagers");
+        System.out.println("All Classifications");
         System.out.println("--------------------------");
-        List<Villager> allVillagers = villagerDao.getVillagers();
-        listAllVillagers(allVillagers);
-    }
-
-    private void listAllVillagers(List<Villager> villagers) {
-        if(villagers.size() > 0) {
-            for(Villager villager : villagers) {
-                System.out.println(villager);
+        List<Classification> allClassifications = classificationDao.getClassifications();
+        if (allClassifications.size() > 0) {
+            for (Classification classification : allClassifications) {
+                System.out.println(classification);
             }
         } else {
             System.out.println("\n*** No results ***");
         }
     }
 
-
     private void handleAddClassification() {
+        System.out.println("Add a new Classification the list!");
+        System.out.println("--------------------------");
 
+        Classification newClassification = new Classification();
+        String classificationName = getUserInput("Enter the name of the new Classification." +
+                "\nLeave blank to skip.");
+        if(!classificationName.equals("")) {
+            newClassification.setName(classificationName);
+        }
+        System.out.println("\n" + newClassification.getName() + " added to the list of Classifications!");
     }
 
     private void handleUpdateClassification() {
+        System.out.println("Update a Classification on the list!");
+        System.out.println("--------------------------");
 
+        Classification selectedClassification = getClassificationSelectionFromUser();
+        String newClassificationName = getUserInput("Please enter the updated name of the Classification." +
+                "\nLeave blank to skip.");
+        if (!newClassificationName.equals("")) {
+            selectedClassification.setName(newClassificationName);
+        }
+        System.out.println("\n" + selectedClassification.getName() + " has been updated!");
     }
 
     private void handleDeleteClassification() {
+        System.out.println("Delete a Classification");
+        Classification classificationToDelete = getClassificationSelectionFromUser();
 
+        classificationDao.deleteClassificationById(classificationToDelete.getId());
+        System.out.println("\n" + classificationToDelete.getName() + " has been deleted!");
     }
 
 
