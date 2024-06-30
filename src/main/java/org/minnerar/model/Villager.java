@@ -84,6 +84,7 @@ public class Villager {
         lovedGifts.add(loved10);
         lovedGifts.add(loved11);
         lovedGifts.add(loved12);
+        this.lovedGifts = lovedGifts;
     }
 
     public String getVillagerDescription() {

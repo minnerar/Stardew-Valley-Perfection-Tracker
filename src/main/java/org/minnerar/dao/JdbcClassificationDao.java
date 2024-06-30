@@ -16,9 +16,9 @@ import java.util.List;
 @Component
 public class JdbcClassificationDao implements ClassificationDao {
 
-    private JdbcTemplate template;
+    private final JdbcTemplate template;
 
-    public void JdbcClassificationDao(JdbcTemplate template) {
+    public JdbcClassificationDao(JdbcTemplate template) {
         this.template = template;
     }
 

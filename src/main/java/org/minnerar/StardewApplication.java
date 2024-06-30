@@ -213,7 +213,7 @@ public class StardewApplication {
             String choice = (String)Menu.getChoiceFromOptions(ACHIEVEMENT_MENU_OPTIONS);
             if(choice.equals(ACHIEVEMENT_MENU_OPTION_DESCRIPTION)) {
                 handleAchievementDescription();
-            } else if (choice.equals(ACHIEVEMENT_MENU_OPTION_RETURN_TO_MAIN)) {
+            } else if (choice.equals(ACHIEVEMENT_MENU_OPTION_ADD_ACHIEVEMENT)) {
                 handleAddAchievement(); // allows the user to add an achievement
             } else if(choice.equals(ACHIEVEMENT_MENU_OPTION_UPDATE_PROGRESS)) {
                 handleUpdateAchievementProgress(); // updates the progress for an achievement
@@ -284,6 +284,7 @@ public class StardewApplication {
         newAchievement.setAchievementTotalNeeded(Integer.parseInt(achievementTotalNeeded));
         newAchievement.setAchievementCurrent(Integer.parseInt(achievementCurrentProgress));
         newAchievement.setAchievementDescription(achievementDescription);
+        newAchievement.setAchievementProgress((double)(Integer.parseInt(achievementCurrentProgress) * 100)/Integer.parseInt(achievementTotalNeeded));
 
         newAchievement = achievementDao.createAchievement(newAchievement);
         System.out.println("\n" + newAchievement.getAchievementName() + " added to the list of Achievements!");
@@ -369,7 +370,7 @@ public class StardewApplication {
     private void listAllVillagers(List<Villager> villagers) {
         if(villagers.size() > 0) {
             for(Villager villager : villagers) {
-                System.out.println(villager);
+                System.out.println(villager.getVillagerName());
             }
         } else {
             System.out.println("\n*** No results ***");
@@ -381,7 +382,7 @@ public class StardewApplication {
         if(villagers.size() > 0) {
             for(Villager villager : villagers) {
                 if (villager.isVillagerMarriageCandidate()) {
-                    System.out.println(villager);
+                    System.out.println(villager.getVillagerName());
                 }
             }
         } else {
@@ -402,9 +403,23 @@ public class StardewApplication {
 
     private void listAllVillagerLovedGifts() {
         List<Villager> villagers = villagerDao.getVillagers();
+
         if(villagers.size() > 0) {
             for(Villager villager : villagers) {
-                System.out.println(villager.getVillagerName() + "'s loved gifts are: " + villager.getVillagerLovedGifts());
+//                StringBuilder lovedGifts = new StringBuilder();
+                List<String> giftArray = villager.getVillagerLovedGifts();
+//                for (int i = 0; i < giftArray.size(); i++) {
+//                    if (String.valueOf(giftArray.indexOf(i)) != null) {
+//                        lovedGifts.append(String.valueOf(giftArray.indexOf(i))).append(" ");
+//                    }
+//                }
+                String list = "";
+                for (String gift : giftArray) {
+                    if (gift != null) {
+                        list += gift + " ";
+                    }
+                }
+                System.out.println(villager.getVillagerName() + "'s loved gifts are: " + list);
             }
         } else {
             System.out.println("\n*** No results ***");
@@ -538,7 +553,7 @@ public class StardewApplication {
         List<Item> allItems = itemDao.getItems();
         if (allItems.size() > 0) {
             for (Item item : allItems) {
-                System.out.println(item);
+                System.out.print(item.getItemName() + " ");
             }
         } else {
             System.out.println("\n*** No results ***");
@@ -743,7 +758,7 @@ public class StardewApplication {
         List<Classification> allClassifications = classificationDao.getClassifications();
         if (allClassifications.size() > 0) {
             for (Classification classification : allClassifications) {
-                System.out.println(classification);
+                System.out.println(classification.getName());
             }
         } else {
             System.out.println("\n*** No results ***");

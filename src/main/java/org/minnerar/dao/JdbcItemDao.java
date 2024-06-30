@@ -199,7 +199,6 @@ public class JdbcItemDao implements ItemDao {
         item.setItemLocation(results.getString("location"));
         item.setItemDescription(results.getString("description"));
         item.setItemClassification(results.getInt("classification_id"));
-        item.setItemAchievementId(results.getInt("achievement_id"));
         return item;
     }
 

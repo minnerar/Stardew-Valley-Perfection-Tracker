@@ -54,7 +54,7 @@ public class JdbcVillagerDao implements VillagerDao {
     @Override
     public List<Villager> getVillagers() {
         List<Villager> villagers = new ArrayList<>();
-        String sql = "SELECT villager_id, name, description FROM villager";
+        String sql = "SELECT * FROM villager";
         try {
             SqlRowSet results = template.queryForRowSet(sql);
             while (results.next()) {
@@ -148,7 +148,8 @@ public class JdbcVillagerDao implements VillagerDao {
         Villager villager = new Villager();
         villager.setVillagerId(results.getInt("villager_id"));
         villager.setVillagerName(results.getString("name"));
-        villager.setVillagerMarriageCandidate(results.getBoolean("marriage_candidate"));
+        villager.setVillagerBirthday(results.getString("birthday"));
+        villager.setVillagerMarriageCandidate(Boolean.parseBoolean(results.getString("marriage_candidate")));
         List<String> lovedGifts = new ArrayList<>();
             // add all the loved gifts into an array, loved3 to loved12 can be null
             lovedGifts.add(results.getString("loved1"));
