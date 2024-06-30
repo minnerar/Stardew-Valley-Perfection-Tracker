@@ -25,7 +25,7 @@ public class StardewApplication {
 
     private static final String MAIN_MENU_OPTION_ACHIEVEMENTS = "List All Achievements";
     private static final String MAIN_MENU_OPTION_CHECK_PROGRESS = "Check All Achievement Progress";
-    private static final String MAIN_MENU_OPTION_ADD_ACHIEVEMENT = "Add Achievement to Track";
+    private static final String MAIN_MENU_OPTION_ACHIEVEMENT_MENU = "Achievement Menu";
     private static final String MAIN_MENU_OPTION_VILLAGER = "Villager Menu";
     private static final String MAIN_MENU_OPTION_ITEM = "Item Menu";
     private static final String MAIN_MENU_OPTION_CLASSIFICATION = "Classification Menu";
@@ -33,7 +33,7 @@ public class StardewApplication {
     private static final String[] MAIN_MENU_OPTIONS = new String[]{
             MAIN_MENU_OPTION_ACHIEVEMENTS,
             MAIN_MENU_OPTION_CHECK_PROGRESS,
-            MAIN_MENU_OPTION_ADD_ACHIEVEMENT,
+            MAIN_MENU_OPTION_ACHIEVEMENT_MENU,
             MAIN_MENU_OPTION_VILLAGER,
             MAIN_MENU_OPTION_ITEM,
             MAIN_MENU_OPTION_CLASSIFICATION,
@@ -41,11 +41,13 @@ public class StardewApplication {
     };
 
     private static final String ACHIEVEMENT_MENU_OPTION_DESCRIPTION = "Description";
+    private static final String ACHIEVEMENT_MENU_OPTION_ADD_ACHIEVEMENT = "Add Achievement to Track";
     private static final String ACHIEVEMENT_MENU_OPTION_UPDATE_PROGRESS = "Update Progress";
     private static final String ACHIEVEMENT_MENU_OPTION_DELETE_ACHIEVEMENT = "Delete Achievement from Tracking";
     private static final String ACHIEVEMENT_MENU_OPTION_RETURN_TO_MAIN = "Return to Main Menu";
     private static final String[] ACHIEVEMENT_MENU_OPTIONS = new String[]{
             ACHIEVEMENT_MENU_OPTION_DESCRIPTION,
+            ACHIEVEMENT_MENU_OPTION_ADD_ACHIEVEMENT,
             ACHIEVEMENT_MENU_OPTION_UPDATE_PROGRESS,
             ACHIEVEMENT_MENU_OPTION_DELETE_ACHIEVEMENT,
             ACHIEVEMENT_MENU_OPTION_RETURN_TO_MAIN
@@ -191,8 +193,8 @@ public class StardewApplication {
                 handleListAllAchievements(); // lists all the achievement names
             } else if (choice.equals(MAIN_MENU_OPTION_CHECK_PROGRESS)) {
                 handleCheckProgress(); // lists all the achievements and the current progress for each one
-            } else if (choice.equals(MAIN_MENU_OPTION_ADD_ACHIEVEMENT)) {
-                handleAddAchievement(); // allows the user to add an achievement
+            } else if (choice.equals(MAIN_MENU_OPTION_ACHIEVEMENT_MENU)) {
+                handleAchievements(); // allows the user to add an achievement
             } else if (choice.equals(MAIN_MENU_OPTION_VILLAGER)) {
                 handleVillager(); // handle the villager option in another menu
             } else if (choice.equals(MAIN_MENU_OPTION_ITEM)) {
@@ -211,6 +213,8 @@ public class StardewApplication {
             String choice = (String)Menu.getChoiceFromOptions(ACHIEVEMENT_MENU_OPTIONS);
             if(choice.equals(ACHIEVEMENT_MENU_OPTION_DESCRIPTION)) {
                 handleAchievementDescription();
+            } else if (choice.equals(ACHIEVEMENT_MENU_OPTION_RETURN_TO_MAIN)) {
+                handleAddAchievement(); // allows the user to add an achievement
             } else if(choice.equals(ACHIEVEMENT_MENU_OPTION_UPDATE_PROGRESS)) {
                 handleUpdateAchievementProgress(); // updates the progress for an achievement
             } else if(choice.equals(ACHIEVEMENT_MENU_OPTION_DELETE_ACHIEVEMENT)) {
@@ -260,7 +264,8 @@ public class StardewApplication {
         List<Achievement> allAchievements = achievementDao.getAchievements();
         if (allAchievements.size() > 0) {
             for (Achievement achievement : allAchievements) {
-                System.out.println(achievement + " Progress: " + achievement.getAchievementCurrent());
+                System.out.println(achievement.getAchievementName() + " Progress: " + achievement.getAchievementCurrent()
+                + " out of " + achievement.getAchievementTotalNeeded());
             }
         }
     }
@@ -279,6 +284,8 @@ public class StardewApplication {
         newAchievement.setAchievementTotalNeeded(Integer.parseInt(achievementTotalNeeded));
         newAchievement.setAchievementCurrent(Integer.parseInt(achievementCurrentProgress));
         newAchievement.setAchievementDescription(achievementDescription);
+
+        newAchievement = achievementDao.createAchievement(newAchievement);
         System.out.println("\n" + newAchievement.getAchievementName() + " added to the list of Achievements!");
     }
 
@@ -445,6 +452,7 @@ public class StardewApplication {
         if (!description.equals("")) {
             newVillager.setVillagerDescription(description);
         }
+        newVillager = villagerDao.createVillager(newVillager);
         System.out.println("\n" + newVillager.getVillagerName() + " added to the list of Villagers!");
     }
 
@@ -632,6 +640,7 @@ public class StardewApplication {
         if (!achievementId.equals("")) {
             newItem.setItemAchievementId(Integer.parseInt(achievementId));
         }
+        newItem = itemDao.createItem(newItem);
         System.out.println("\n" + newItem.getItemName() + " added to the list of items!");
     }
 
@@ -639,7 +648,7 @@ public class StardewApplication {
         System.out.println("Update an Item on the list!");
         System.out.println("--------------------------");
 
-        Item newItem = new Item();
+        Item updatedItem = new Item();
         String itemName = getUserInput("Enter the updated name of the item." +
                 "\nLeave blank to skip.");
         String classification = getUserInput("Enter the classification id for the item" +
@@ -659,37 +668,38 @@ public class StardewApplication {
         String achievementId = getUserInput("Enter the updated associated achievement id for the item." +
                 "\nLeave blank to skip.");
         if (!itemName.equals("")) {
-            newItem.setItemName(itemName);
+            updatedItem.setItemName(itemName);
         }
         if (!classification.equals("")) {
-            newItem.setItemClassification(Integer.parseInt(classification));
+            updatedItem.setItemClassification(Integer.parseInt(classification));
         }
         if (!completed.equals("")) {
             if (completed.equalsIgnoreCase("yes")) {
-                newItem.setItemCompleted(true);
+                updatedItem.setItemCompleted(true);
             } else if (completed.equalsIgnoreCase("no")){
-                newItem.setItemCompleted(false);
+                updatedItem.setItemCompleted(false);
             }
         }
         if (!season.equals("")) {
-            newItem.setItemSeason(season);
+            updatedItem.setItemSeason(season);
         }
         if (!time.equals("")) {
-            newItem.setItemTime(time);
+            updatedItem.setItemTime(time);
         }
         if (!weather.equals("")) {
-            newItem.setItemWeather(weather);
+            updatedItem.setItemWeather(weather);
         }
         if (!location.equals("")) {
-            newItem.setItemLocation(location);
+            updatedItem.setItemLocation(location);
         }
         if (!description.equals("")) {
-            newItem.setItemDescription(description);
+            updatedItem.setItemDescription(description);
         }
         if (!achievementId.equals("")) {
-            newItem.setItemAchievementId(Integer.parseInt(achievementId));
+            updatedItem.setItemAchievementId(Integer.parseInt(achievementId));
         }
-        System.out.println("\n" + newItem.getItemName() + " added to the list of items!");
+        updatedItem = itemDao.updateItem(updatedItem);
+        System.out.println("\n" + updatedItem.getItemName() + " added to the list of items!");
     }
 
     private void handleDeleteItem() {
@@ -750,6 +760,7 @@ public class StardewApplication {
         if(!classificationName.equals("")) {
             newClassification.setName(classificationName);
         }
+        newClassification = classificationDao.createClassification(newClassification);
         System.out.println("\n" + newClassification.getName() + " added to the list of Classifications!");
     }
 
@@ -763,6 +774,7 @@ public class StardewApplication {
         if (!newClassificationName.equals("")) {
             selectedClassification.setName(newClassificationName);
         }
+        selectedClassification = classificationDao.updateClassification(selectedClassification);
         System.out.println("\n" + selectedClassification.getName() + " has been updated!");
     }
 
