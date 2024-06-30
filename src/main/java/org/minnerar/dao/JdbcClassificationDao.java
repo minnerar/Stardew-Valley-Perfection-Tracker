@@ -18,7 +18,7 @@ public class JdbcClassificationDao implements ClassificationDao {
 
     private JdbcTemplate template;
 
-    public void JdbcVillagerDao(JdbcTemplate template) {
+    public void JdbcClassificationDao(JdbcTemplate template) {
         this.template = template;
     }
 
@@ -55,9 +55,9 @@ public class JdbcClassificationDao implements ClassificationDao {
     @Override
     public Classification createClassification(Classification classification) {
         Classification newClassification = null;
-        String sql = "INSERT INTO classification (name) VALUES (?) RETURNING classification_id";
+        String sql = "INSERT INTO classification VALUES (?) RETURNING classification_id";
         try {
-            int classificationId = template.queryForObject(sql, int.class, classification.getName(), classification.getId());
+            int classificationId = template.queryForObject(sql, int.class, classification.getName());
             newClassification = getClassificationById(classificationId);
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
@@ -72,7 +72,7 @@ public class JdbcClassificationDao implements ClassificationDao {
     @Override
     public Classification updateClassification(Classification classification) {
         Classification updatedClassification = null;
-        String sql = "UPDATE classification (name) SET (?) WHERE classification_id = ?";
+        String sql = "UPDATE classification SET (?) WHERE classification_id = ?";
         try {
             int rowsAffected = template.update(sql, classification.getName(), classification.getId());
             if (rowsAffected == 0) {
@@ -92,7 +92,7 @@ public class JdbcClassificationDao implements ClassificationDao {
     @Override
     public int deleteClassificationById(int id) {
         int numberOfRows = 0;
-        String updateClassificationSql = "UDPATE item_classification SET classification_id = 0 WHERE classification_id = ?";
+        String updateClassificationSql = "UPDATE item_classification SET classification_id = 0 WHERE classification_id = ?";
         String deleteClassificationSql = "DELETE FROM classification WHERE classification_id = ?";
 
         try {

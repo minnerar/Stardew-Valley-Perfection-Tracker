@@ -75,7 +75,7 @@ public class JdbcAchievementDao implements AchievementDao {
     public Achievement updateAchievement(Achievement achievement) {
         Achievement updatedAchievement = null;
 
-        String sql = "UPDATE achievement (name, description) SET (?, ?) WHERE achievement_id = ?";
+        String sql = "UPDATE achievement SET (name = ?, description = ?) WHERE achievement_id = ?";
 
         try {
             int rowsAffected = template.update(sql, achievement.getAchievementName(), achievement.getAchievementDescription(), achievement.getAchievementId());
