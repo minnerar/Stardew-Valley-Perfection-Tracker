@@ -6,18 +6,17 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Component
 public class JdbcAchievementDao implements AchievementDao {
 
     private final JdbcTemplate template;
-
     public JdbcAchievementDao(JdbcTemplate template) {
         this.template = template;
     }
-
     @Override
     public Achievement getAchievementById(int id) {
         Achievement achievement = null;
@@ -39,9 +38,7 @@ public class JdbcAchievementDao implements AchievementDao {
     @Override
     public List<Achievement> getAchievements() {
         List<Achievement> achievements = new ArrayList<>();
-
-        String sql = "SELECT achievement_id, name, description FROM achievement";
-
+        String sql = "SELECT * FROM achievement";
         try {
             SqlRowSet results = template.queryForRowSet(sql);
             while (results.next()) {
@@ -50,7 +47,6 @@ public class JdbcAchievementDao implements AchievementDao {
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database.", e);
         }
-
         return achievements;
     }
 

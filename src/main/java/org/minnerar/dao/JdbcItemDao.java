@@ -7,10 +7,12 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class JdbcItemDao implements ItemDao {
 
     private final JdbcTemplate template;
@@ -96,7 +98,7 @@ public class JdbcItemDao implements ItemDao {
     @Override
     public List<Item> getItems() {
         List<Item> items = new ArrayList<>();
-        String sql = "SELECT item_id, name, description FROM item";
+        String sql = "SELECT * FROM item";
         try {
             SqlRowSet results = template.queryForRowSet(sql);
             while (results.next()) {

@@ -8,10 +8,12 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class JdbcClassificationDao implements ClassificationDao {
 
     private JdbcTemplate template;
@@ -38,7 +40,7 @@ public class JdbcClassificationDao implements ClassificationDao {
     @Override
     public List<Classification> getClassifications() {
         List<Classification> classifications = new ArrayList<>();
-        String sql = "SELECT * description FROM classification";
+        String sql = "SELECT * FROM classification";
         try {
             SqlRowSet results = template.queryForRowSet(sql);
             while (results.next()) {

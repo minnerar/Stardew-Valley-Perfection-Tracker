@@ -11,6 +11,7 @@ import org.minnerar.model.Villager;
 import org.minnerar.view.Menu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+@SpringBootApplication
 public class StardewApplication {
 
     private static final String MAIN_MENU_OPTION_ACHIEVEMENTS = "List All Achievements";
@@ -156,13 +158,14 @@ public class StardewApplication {
     private final JdbcVillagerDao villagerDao;
     private final JdbcClassificationDao classificationDao;
 
-    @Autowired
+//    @Autowired
     public StardewApplication(JdbcAchievementDao achievementDao, JdbcItemDao itemDao, JdbcVillagerDao villagerDao, JdbcClassificationDao classificationDao) {
 //        this.dataSource = dataSource;
         this.achievementDao = achievementDao;
         this.itemDao = itemDao;
         this.villagerDao = villagerDao;
         this.classificationDao = classificationDao;
+        run();
     }
 
     public static void main(String[] args) {
@@ -329,7 +332,7 @@ public class StardewApplication {
             } else if(choice.equals(VILLAGER_DELETE_VILLAGER)) {
                 handleDeleteVillager();
             } else if(choice.equals(ACHIEVEMENT_MENU_OPTION_RETURN_TO_MAIN)) {
-                // TODO: HOW DO I DO THIS?
+                run();
             }
         } catch (DaoException e) {
             System.out.println("Error occurred: " + e.getMessage());
@@ -495,7 +498,7 @@ public class StardewApplication {
             } else if(choice.equals(ITEM_DISPLAY_DELETE_ITEM)) {
                 handleDeleteItem(); // delete an item
             } else if(choice.equals(ACHIEVEMENT_MENU_OPTION_RETURN_TO_MAIN)) {
-                // TODO: HOW DO I DO THIS?
+                run();
             }
         } catch (DaoException e) {
             System.out.println("Error occurred: " + e.getMessage());
@@ -698,7 +701,7 @@ public class StardewApplication {
             } else if(choice.equals(CLASSIFICATION_DISPLAY_MENU_DELETE)) {
                 handleDeleteClassification(); // delete a classification
             } else if(choice.equals(ACHIEVEMENT_MENU_OPTION_RETURN_TO_MAIN)) {
-                // TODO: HOW DO I DO THIS?
+                run();
             }
         } catch (DaoException e) {
             System.out.println("Error occurred: " + e.getMessage());
