@@ -16,7 +16,7 @@ public class Achievement {
     public Achievement(int id, String name, int totalNeeded, int current, String description) {
         this.id = id;
         this.name = name;
-        this.progress = getAchievementProgress(current, totalNeeded);
+        this.progress = getAchievementProgress();
         this.totalNeeded = totalNeeded;
         this.current = current;
         this.description = description;
@@ -62,8 +62,12 @@ public class Achievement {
         this.description = description;
     }
 
-    private double getAchievementProgress(int current, int totalNeeded) {
-        return ((double)current / totalNeeded);
+    public double getAchievementProgress() {
+        return ((double)(getAchievementCurrent()*100.00) / getAchievementTotalNeeded());
+    }
+
+    public void setAchievementProgress(double progress) {
+        this.progress = progress;
     }
 
     @Override

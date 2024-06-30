@@ -292,13 +292,26 @@ public class StardewApplication {
         Achievement selectedAchievement = getAchievementSelectionFromUser();
         String newAchievementName = getUserInput("Please enter the updated name of the Achievement. " +
                 "\nLeave blank to skip.");
-        String updatedProgress = getUserInput("Please enter the updated progress for this Achievement." +
+        String updatedCurrent = getUserInput("Please enter the updated current amount for this Achievement." +
+                "\nLeave blank to skip.");
+        String updatedTotalNeeded = getUserInput("Please enter the updated total needed for this Achievement." +
+                "\nLeave blank to skip.");
+        String updatedDescription = getUserInput("Please enter the updated description for this Achievement." +
                 "\nLeave blank to skip.");
         if (!newAchievementName.equals("")) {
             selectedAchievement.setAchievementName(newAchievementName);
         }
-        if (!updatedProgress.equals("")) {
-            selectedAchievement.setAchievementCurrent(Integer.parseInt(updatedProgress));
+        if (!updatedCurrent.equals("")) {
+            selectedAchievement.setAchievementCurrent(Integer.parseInt(updatedCurrent));
+        }
+        if (!updatedTotalNeeded.equals("")) {
+            selectedAchievement.setAchievementTotalNeeded(Integer.parseInt(updatedTotalNeeded));
+        }
+        if (!updatedDescription.equals("")) {
+            selectedAchievement.setAchievementDescription(updatedDescription);
+        }
+        if (!updatedCurrent.equals("") && !updatedTotalNeeded.equals("")) {
+            selectedAchievement.setAchievementProgress((double)(Integer.parseInt(updatedCurrent)*100)/Integer.parseInt(updatedTotalNeeded));
         }
         selectedAchievement = achievementDao.updateAchievement(selectedAchievement);
         System.out.println("\n" + selectedAchievement.getAchievementName() + " has been updated!");

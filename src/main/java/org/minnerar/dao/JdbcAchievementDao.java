@@ -8,15 +8,18 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
+import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 @Component
 public class JdbcAchievementDao implements AchievementDao {
 
     private final JdbcTemplate template;
-    public JdbcAchievementDao(JdbcTemplate template) {
-        this.template = template;
+
+    public JdbcAchievementDao(DataSource dataSource) {
+        this.template = new JdbcTemplate(dataSource);
     }
+
     @Override
     public Achievement getAchievementById(int id) {
         Achievement achievement = null;
@@ -75,10 +78,10 @@ public class JdbcAchievementDao implements AchievementDao {
     public Achievement updateAchievement(Achievement achievement) {
         Achievement updatedAchievement = null;
 
-        String sql = "UPDATE achievement SET (name = ?, description = ?) WHERE achievement_id = ?";
+        String sql = "UPDATE achievement SET (name = ?, current = ?, total_needed = ?, description = ?) WHERE achievement_id = ?";
 
         try {
-            int rowsAffected = template.update(sql, achievement.getAchievementName(), achievement.getAchievementDescription(), achievement.getAchievementId());
+            int rowsAffected = template.update(sql, achievement.getAchievementName(), achievement.getAchievementCurrent(), achievement.getAchievementTotalNeeded(), achievement.getAchievementDescription(), achievement.getAchievementId());
             if (rowsAffected == 0) {
                 throw new DaoException("Zero rows affected, expected at least one.");
             }
@@ -117,6 +120,7 @@ public class JdbcAchievementDao implements AchievementDao {
         achievement.setAchievementCurrent(results.getInt("current"));
         achievement.setAchievementTotalNeeded(results.getInt("total_needed"));
         achievement.setAchievementDescription(results.getString("description"));
+        achievement.setAchievementProgress((double)(results.getInt("current")*100)/results.getInt("total_needed"));
         return achievement;
     }
 
