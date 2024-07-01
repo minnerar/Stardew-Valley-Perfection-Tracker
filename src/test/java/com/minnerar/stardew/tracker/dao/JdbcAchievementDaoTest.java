@@ -38,9 +38,9 @@ public class JdbcAchievementDaoTest extends BaseDaoTest {
             Achievement mappedAchievement = new Achievement();
             mappedAchievement.setAchievementId(results.getInt("achievement_id"));
             mappedAchievement.setAchievementName(results.getString("name"));
-            mappedAchievement.setAchievementCurrent(results.getInt("progress"));
             mappedAchievement.setAchievementTotalNeeded(results.getInt("total_needed"));
-//            mappedAchievement.setAchievementProgress((double)(results.getInt("current")*100)/results.getInt("total_needed"));
+            mappedAchievement.setAchievementProgress(results.getInt("progress"));
+            mappedAchievement.setAchievementCurrent(mappedAchievement.getAchievementProgress(), mappedAchievement.getAchievementTotalNeeded());
             mappedAchievement.setAchievementDescription(results.getString("description"));
             actualAchievement = mappedAchievement;
         }
@@ -54,7 +54,7 @@ public class JdbcAchievementDaoTest extends BaseDaoTest {
         Achievement newAchievement = new Achievement();
         newAchievement.setAchievementId(1);
         newAchievement.setAchievementName("Test Achievement One");
-        newAchievement.setAchievementCurrent(0);
+        newAchievement.setAchievementProgress(0);
         newAchievement.setAchievementTotalNeeded(100);
         newAchievement.setAchievementDescription("Test Achievement 1 description");
 
@@ -81,7 +81,7 @@ public class JdbcAchievementDaoTest extends BaseDaoTest {
         Achievement existingAchievement = new Achievement();
         existingAchievement.setAchievementId(TEST_ACHIEVEMENT_TWO.getAchievementId());
         existingAchievement.setAchievementName("Test Achievement One");
-        existingAchievement.setAchievementCurrent(0);
+        existingAchievement.setAchievementProgress(0);
         existingAchievement.setAchievementTotalNeeded(100);
         existingAchievement.setAchievementDescription("Test Achievement 1 description");
 

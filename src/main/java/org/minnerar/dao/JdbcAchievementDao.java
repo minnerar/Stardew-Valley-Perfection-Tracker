@@ -25,7 +25,7 @@ public class JdbcAchievementDao implements AchievementDao {
         Achievement achievement = null;
         // set up empty achievement object
 
-        String sql = "SELECT name, progress, total_needed, description FROM achievement WHERE achievement_id = ?";
+        String sql = "SELECT * FROM achievement WHERE achievement_id = ?";
 
         try {
             SqlRowSet rowSet = template.queryForRowSet(sql, id);
@@ -57,16 +57,15 @@ public class JdbcAchievementDao implements AchievementDao {
     public Achievement createAchievement(Achievement achievement) {
         Achievement newAchievement = null;
 
-        String sql = "INSERT INTO achievement (name, total_needed, current, progress, description) VALUES (?, ?, ?, ?, ?) RETURNING achievement_id";
+        String sql = "INSERT INTO achievement (name, total_needed, progress, current, description) VALUES (?, ?, ?, ?, ?) RETURNING achievement_id";
 
         try {
             int achievementId = template.queryForObject(sql, int.class, achievement.getAchievementName(),
-                    achievement.getAchievementTotalNeeded(), achievement.getAchievementCurrent(), achievement.getAchievementDescription());
+                    achievement.getAchievementTotalNeeded(), achievement.getAchievementProgress(), achievement.getAchievementCurrent(), achievement.getAchievementDescription());
             newAchievement = getAchievementById(achievementId);
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
-        } catch (
-                DataIntegrityViolationException e) {
+        } catch (DataIntegrityViolationException e) {
             throw new DaoException("Data integrity violation", e);
         } catch (NullPointerException e) {
             throw new DaoException("Null pointer exception", e);
@@ -122,7 +121,7 @@ public class JdbcAchievementDao implements AchievementDao {
         achievement.setAchievementProgress(results.getInt("progress"));
         achievement.setAchievementTotalNeeded(results.getInt("total_needed"));
         achievement.setAchievementDescription(results.getString("description"));
-        achievement.setAchievementCurrent((results.getInt("current")*100)/results.getInt("total_needed"));
+        achievement.setAchievementCurrent(achievement.getAchievementProgress(), achievement.getAchievementTotalNeeded());
         return achievement;
     }
 

@@ -284,7 +284,7 @@ public class StardewApplication {
         newAchievement.setAchievementTotalNeeded(Integer.parseInt(achievementTotalNeeded));
         newAchievement.setAchievementProgress(Integer.parseInt(achievementCurrentProgress));
         newAchievement.setAchievementDescription(achievementDescription);
-        newAchievement.setAchievementCurrent((Integer.parseInt(achievementCurrentProgress) * 100)/Integer.parseInt(achievementTotalNeeded));
+        newAchievement.setAchievementCurrent(newAchievement.getAchievementProgress(), newAchievement.getAchievementTotalNeeded());
 
         newAchievement = achievementDao.createAchievement(newAchievement);
         System.out.println("\n" + newAchievement.getAchievementName() + " added to the list of Achievements!");
@@ -319,7 +319,7 @@ public class StardewApplication {
             selectedAchievement.setAchievementDescription(updatedDescription);
         }
         if (!updatedProgress.equals("") && !updatedTotalNeeded.equals("")) {
-            selectedAchievement.setAchievementCurrent((Integer.parseInt(updatedProgress)*100)/Integer.parseInt(updatedTotalNeeded));
+            selectedAchievement.setAchievementCurrent(selectedAchievement.getAchievementProgress(), selectedAchievement.getAchievementTotalNeeded());
         }
         selectedAchievement = achievementDao.updateAchievement(selectedAchievement);
         System.out.println("\n" + selectedAchievement.getAchievementName() + " has been updated!");

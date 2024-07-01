@@ -37,7 +37,7 @@ public class TestingDatabaseConfig {
     public void setup() {
         if (System.getenv("DB_HOST") == null) {
             adminDataSource = new SingleConnectionDataSource();
-            adminDataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
+            adminDataSource.setUrl("jdbc:postgresql://localhost:5432/StardewValleyPerfectionTrackerTesting");
             adminDataSource.setUsername("postgres");
             adminDataSource.setPassword("postgres1");
             adminJdbcTemplate = new JdbcTemplate(adminDataSource);

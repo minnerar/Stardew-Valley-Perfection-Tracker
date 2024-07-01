@@ -13,12 +13,12 @@ public class Achievement {
 
     public Achievement() {}
 
-    public Achievement(int id, String name, int totalNeeded, int current, String description) {
+    public Achievement(int id, String name, int totalNeeded, int progress, String description) {
         this.id = id;
         this.name = name;
-        this.progress = getAchievementProgress();
+        this.progress = progress;
         this.totalNeeded = totalNeeded;
-        this.current = current;
+        this.current = (double)getAchievementProgress() / getAchievementTotalNeeded();
         this.description = description;
     }
 
@@ -50,8 +50,8 @@ public class Achievement {
         return current;
     }
 
-    public void setAchievementCurrent(int current) {
-        this.current = ((double)(getAchievementProgress()*100.00) / getAchievementTotalNeeded());
+    public void setAchievementCurrent(int progress, int totalNeeded) {
+        this.current = ((double)(progress*100.00) / totalNeeded);
     }
 
     public String getAchievementDescription() {
