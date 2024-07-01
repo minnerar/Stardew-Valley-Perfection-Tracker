@@ -42,13 +42,13 @@ public class StardewApplication {
 
     private static final String ACHIEVEMENT_MENU_OPTION_DESCRIPTION = "Description";
     private static final String ACHIEVEMENT_MENU_OPTION_ADD_ACHIEVEMENT = "Add Achievement to Track";
-    private static final String ACHIEVEMENT_MENU_OPTION_UPDATE_PROGRESS = "Update Progress";
+    private static final String ACHIEVEMENT_MENU_OPTION_UPDATE_ACHIEVEMENT = "Update Achievement";
     private static final String ACHIEVEMENT_MENU_OPTION_DELETE_ACHIEVEMENT = "Delete Achievement from Tracking";
     private static final String ACHIEVEMENT_MENU_OPTION_RETURN_TO_MAIN = "Return to Main Menu";
     private static final String[] ACHIEVEMENT_MENU_OPTIONS = new String[]{
             ACHIEVEMENT_MENU_OPTION_DESCRIPTION,
             ACHIEVEMENT_MENU_OPTION_ADD_ACHIEVEMENT,
-            ACHIEVEMENT_MENU_OPTION_UPDATE_PROGRESS,
+            ACHIEVEMENT_MENU_OPTION_UPDATE_ACHIEVEMENT,
             ACHIEVEMENT_MENU_OPTION_DELETE_ACHIEVEMENT,
             ACHIEVEMENT_MENU_OPTION_RETURN_TO_MAIN
     };
@@ -188,7 +188,7 @@ public class StardewApplication {
 
         boolean running = true;
         while (running) {
-            String choice = (String) Menu.getChoiceFromOptions(MAIN_MENU_OPTIONS);
+            String choice = (String) Menu.getMenuChoiceFromOptions(MAIN_MENU_OPTIONS);
             if (choice.equals(MAIN_MENU_OPTION_ACHIEVEMENTS)) {
                 handleListAllAchievements(); // lists all the achievement names
             } else if (choice.equals(MAIN_MENU_OPTION_CHECK_PROGRESS)) {
@@ -210,17 +210,17 @@ public class StardewApplication {
     private void handleAchievements() {
         try {
             System.out.println("Achievements Menu Options");
-            String choice = (String)Menu.getChoiceFromOptions(ACHIEVEMENT_MENU_OPTIONS);
+            String choice = (String)Menu.getMenuChoiceFromOptions(ACHIEVEMENT_MENU_OPTIONS);
             if(choice.equals(ACHIEVEMENT_MENU_OPTION_DESCRIPTION)) {
                 handleAchievementDescription();
             } else if (choice.equals(ACHIEVEMENT_MENU_OPTION_ADD_ACHIEVEMENT)) {
                 handleAddAchievement(); // allows the user to add an achievement
-            } else if(choice.equals(ACHIEVEMENT_MENU_OPTION_UPDATE_PROGRESS)) {
+            } else if(choice.equals(ACHIEVEMENT_MENU_OPTION_UPDATE_ACHIEVEMENT)) {
                 handleUpdateAchievementProgress(); // updates the progress for an achievement
             } else if(choice.equals(ACHIEVEMENT_MENU_OPTION_DELETE_ACHIEVEMENT)) {
                 handleDeleteAchievement(); // deletes an achievement
             } else if(choice.equals(ACHIEVEMENT_MENU_OPTION_RETURN_TO_MAIN)) {
-                // TODO: HOW DO I DO THIS?
+                run();
             }
         } catch (DaoException e) {
             System.out.println("Error occurred: " + e.getMessage());
@@ -282,9 +282,9 @@ public class StardewApplication {
 
         newAchievement.setAchievementName(achievementName);;
         newAchievement.setAchievementTotalNeeded(Integer.parseInt(achievementTotalNeeded));
-        newAchievement.setAchievementCurrent(Integer.parseInt(achievementCurrentProgress));
+        newAchievement.setAchievementProgress(Integer.parseInt(achievementCurrentProgress));
         newAchievement.setAchievementDescription(achievementDescription);
-        newAchievement.setAchievementProgress((double)(Integer.parseInt(achievementCurrentProgress) * 100)/Integer.parseInt(achievementTotalNeeded));
+        newAchievement.setAchievementCurrent((Integer.parseInt(achievementCurrentProgress) * 100)/Integer.parseInt(achievementTotalNeeded));
 
         newAchievement = achievementDao.createAchievement(newAchievement);
         System.out.println("\n" + newAchievement.getAchievementName() + " added to the list of Achievements!");
@@ -293,14 +293,14 @@ public class StardewApplication {
     private Achievement getAchievementSelectionFromUser() {
         System.out.println("Choose an Achievement:");
         List<Achievement> allAchievements = achievementDao.getAchievements();
-        return (Achievement)Menu.getChoiceFromOptions(allAchievements.toArray());
+        return (Achievement)Menu.getAchievementChoiceFromOptions(allAchievements);
     }
 
     private void handleUpdateAchievementProgress() {
         Achievement selectedAchievement = getAchievementSelectionFromUser();
         String newAchievementName = getUserInput("Please enter the updated name of the Achievement. " +
                 "\nLeave blank to skip.");
-        String updatedCurrent = getUserInput("Please enter the updated current amount for this Achievement." +
+        String updatedProgress = getUserInput("Please enter the updated current progress amount for this Achievement." +
                 "\nLeave blank to skip.");
         String updatedTotalNeeded = getUserInput("Please enter the updated total needed for this Achievement." +
                 "\nLeave blank to skip.");
@@ -309,8 +309,8 @@ public class StardewApplication {
         if (!newAchievementName.equals("")) {
             selectedAchievement.setAchievementName(newAchievementName);
         }
-        if (!updatedCurrent.equals("")) {
-            selectedAchievement.setAchievementCurrent(Integer.parseInt(updatedCurrent));
+        if (!updatedProgress.equals("")) {
+            selectedAchievement.setAchievementProgress(Integer.parseInt(updatedProgress));
         }
         if (!updatedTotalNeeded.equals("")) {
             selectedAchievement.setAchievementTotalNeeded(Integer.parseInt(updatedTotalNeeded));
@@ -318,8 +318,8 @@ public class StardewApplication {
         if (!updatedDescription.equals("")) {
             selectedAchievement.setAchievementDescription(updatedDescription);
         }
-        if (!updatedCurrent.equals("") && !updatedTotalNeeded.equals("")) {
-            selectedAchievement.setAchievementProgress((double)(Integer.parseInt(updatedCurrent)*100)/Integer.parseInt(updatedTotalNeeded));
+        if (!updatedProgress.equals("") && !updatedTotalNeeded.equals("")) {
+            selectedAchievement.setAchievementCurrent((Integer.parseInt(updatedProgress)*100)/Integer.parseInt(updatedTotalNeeded));
         }
         selectedAchievement = achievementDao.updateAchievement(selectedAchievement);
         System.out.println("\n" + selectedAchievement.getAchievementName() + " has been updated!");
@@ -337,7 +337,7 @@ public class StardewApplication {
     private void handleVillager() {
         try {
             System.out.println("Villager Menu Options");
-            String choice = (String)Menu.getChoiceFromOptions(VILLAGER_DISPLAY_MENU);
+            String choice = (String)Menu.getMenuChoiceFromOptions(VILLAGER_DISPLAY_MENU);
             if(choice.equals(VILLAGER_DISPLAY_ALL)) {
                 handleListAllVillagers(); // list out all the villagers
             } else if(choice.equals(VILLAGER_DISPLAY_MARRIAGE_CANDIDATES)) {
@@ -519,7 +519,7 @@ public class StardewApplication {
     private void handleItem() {
         try {
             System.out.println("Villager Menu Options");
-            String choice = (String)Menu.getChoiceFromOptions(ITEM_DISPLAY_MENU);
+            String choice = (String)Menu.getMenuChoiceFromOptions(ITEM_DISPLAY_MENU);
             if(choice.equals(ITEM_DISPLAY_MENU_SHOW_ALL)) {
                 handleDisplayAllItems(); // display all items
             } else if(choice.equals(ITEM_DISPLAY_MENU_SHOW_MISSING)) {
@@ -732,7 +732,7 @@ public class StardewApplication {
     private void handleClassification() {
         try {
             System.out.println("Classification Menu Options");
-            String choice = (String)Menu.getChoiceFromOptions(CLASSIFICATION_DISPLAY_MENU);
+            String choice = (String)Menu.getMenuChoiceFromOptions(CLASSIFICATION_DISPLAY_MENU);
             if(choice.equals(CLASSIFICATION_DISPLAY_MENU_SHOW_ALL)) {
                 handleDisplayAllClassifications(); // list all the classifications
             } else if(choice.equals(CLASSIFICATION_DISPLAY_MENU_ADD)) {

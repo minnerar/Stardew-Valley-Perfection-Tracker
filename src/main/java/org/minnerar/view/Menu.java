@@ -1,5 +1,6 @@
 package org.minnerar.view;
 
+import org.minnerar.model.Achievement;
 import org.minnerar.model.Classification;
 import org.minnerar.model.Item;
 import org.minnerar.model.Villager;
@@ -20,21 +21,21 @@ public class Menu {
         this.in = new Scanner(input);
     }
 
-    public static Object getChoiceFromOptions(Object[] options) {
+    public static Object getMenuChoiceFromOptions(Object[] options) {
         Object choice = null;
-        while (choice == null) {
+        while(choice == null) {
             displayMenuOptions(options);
-            choice = getChoiceFromUserInput(options);
+            choice = getMenuChoiceFromUserInput(options);
         }
         return choice;
     }
 
-    private static Object getChoiceFromUserInput(Object[] options) {
+    private static Object getMenuChoiceFromUserInput(Object[] options) {
         Object choice = null;
         String userInput = in.next();
         try {
             int selectedOption = Integer.valueOf(userInput);
-            if (selectedOption <= options.length) {
+            if(selectedOption <= options.length) {
                 choice = options[selectedOption - 1];
             }
         } catch(NumberFormatException e) {
@@ -50,6 +51,41 @@ public class Menu {
         for(int i = 0; i < options.length; i++) {
             int optionNum = i+1;
             out.println(optionNum+") "+options[i]);
+        }
+        out.print("\nPlease choose an option >>> ");
+        out.flush();
+    }
+
+    public static Achievement getAchievementChoiceFromOptions(List<Achievement> achievements) {
+        Achievement achievement = null;
+        while (achievement == null) {
+            displayAchievementMenuOptions(achievements);
+            achievement = getAchievementChoiceFromUserInput(achievements);
+        }
+        return achievement;
+    }
+
+    private static Achievement getAchievementChoiceFromUserInput(List<Achievement> achievements) {
+        Achievement achievement = null;
+        String userInput = in.next();
+        try {
+            int selectedOption = Integer.valueOf(userInput);
+            if (selectedOption <= achievements.size()) {
+                achievement = achievements.get(selectedOption - 1);
+            }
+        } catch(NumberFormatException e) {
+        }
+        if(achievement == null) {
+            out.println("\n*** "+userInput+" is not a valid option ***\n");
+        }
+        return achievement;
+    }
+
+    private static void displayAchievementMenuOptions(List<Achievement> achievements) {
+        out.println();
+        for(int i = 0; i < achievements.size(); i++) {
+            int optionNum = i+1;
+            out.println(optionNum+") "+ achievements.get(i).getAchievementName());
         }
         out.print("\nPlease choose an option >>> ");
         out.flush();

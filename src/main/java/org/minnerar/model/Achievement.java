@@ -7,9 +7,9 @@ public class Achievement {
     private int id;
     private String name;
     private int totalNeeded;
-    private int current;
+    private double current;
     private String description;
-    private double progress;
+    private int progress;
 
     public Achievement() {}
 
@@ -46,12 +46,12 @@ public class Achievement {
         this.totalNeeded = totalNeeded;
     }
 
-    public int getAchievementCurrent() {
+    public double getAchievementCurrent() {
         return current;
     }
 
     public void setAchievementCurrent(int current) {
-        this.current = current;
+        this.current = ((double)(getAchievementProgress()*100.00) / getAchievementTotalNeeded());
     }
 
     public String getAchievementDescription() {
@@ -62,11 +62,11 @@ public class Achievement {
         this.description = description;
     }
 
-    public double getAchievementProgress() {
-        return ((double)(getAchievementCurrent()*100.00) / getAchievementTotalNeeded());
+    public int getAchievementProgress() {
+        return progress;
     }
 
-    public void setAchievementProgress(double progress) {
+    public void setAchievementProgress(int progress) {
         this.progress = progress;
     }
 

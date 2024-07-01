@@ -25,10 +25,10 @@ public class JdbcAchievementDao implements AchievementDao {
         Achievement achievement = null;
         // set up empty achievement object
 
-        String sql = "SELECT * FROM achievement WHERE achievement_id = ?";
+        String sql = "SELECT name, progress, total_needed, description FROM achievement WHERE achievement_id = ?";
 
         try {
-            SqlRowSet rowSet = template.queryForRowSet(sql);
+            SqlRowSet rowSet = template.queryForRowSet(sql, id);
             if (rowSet.next()) {
                 achievement = mapRowToAchievement(rowSet);
             }
@@ -57,7 +57,7 @@ public class JdbcAchievementDao implements AchievementDao {
     public Achievement createAchievement(Achievement achievement) {
         Achievement newAchievement = null;
 
-        String sql = "INSERT INTO achievement (name, total_needed, current, description) VALUES (?, ?, ?, ?) RETURNING achievement_id";
+        String sql = "INSERT INTO achievement (name, total_needed, current, progress, description) VALUES (?, ?, ?, ?, ?) RETURNING achievement_id";
 
         try {
             int achievementId = template.queryForObject(sql, int.class, achievement.getAchievementName(),
@@ -79,10 +79,10 @@ public class JdbcAchievementDao implements AchievementDao {
     public Achievement updateAchievement(Achievement achievement) {
         Achievement updatedAchievement = null;
 
-        String sql = "UPDATE achievement SET (name = ?, current = ?, total_needed = ?, description = ?) WHERE achievement_id = ?";
+        String sql = "UPDATE achievement SET name = ?, progress = ?, total_needed = ?, description = ? WHERE achievement_id = ?";
 
         try {
-            int rowsAffected = template.update(sql, achievement.getAchievementName(), achievement.getAchievementCurrent(),
+            int rowsAffected = template.update(sql, achievement.getAchievementName(), achievement.getAchievementProgress(),
                     achievement.getAchievementTotalNeeded(), achievement.getAchievementDescription(), achievement.getAchievementId());
             if (rowsAffected == 0) {
                 throw new DaoException("Zero rows affected, expected at least one.");
@@ -119,10 +119,10 @@ public class JdbcAchievementDao implements AchievementDao {
         Achievement achievement = new Achievement();
         achievement.setAchievementId(results.getInt("achievement_id"));
         achievement.setAchievementName(results.getString("name"));
-        achievement.setAchievementCurrent(results.getInt("current"));
+        achievement.setAchievementProgress(results.getInt("progress"));
         achievement.setAchievementTotalNeeded(results.getInt("total_needed"));
         achievement.setAchievementDescription(results.getString("description"));
-        achievement.setAchievementProgress((double)(results.getInt("current")*100)/results.getInt("total_needed"));
+        achievement.setAchievementCurrent((results.getInt("current")*100)/results.getInt("total_needed"));
         return achievement;
     }
 
