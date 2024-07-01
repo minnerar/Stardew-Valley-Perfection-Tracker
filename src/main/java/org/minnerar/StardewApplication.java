@@ -364,12 +364,8 @@ public class StardewApplication {
         System.out.println("All Villagers");
         System.out.println("--------------------------");
         List<Villager> allVillagers = villagerDao.getVillagers();
-        listAllVillagers(allVillagers);
-    }
-
-    private void listAllVillagers(List<Villager> villagers) {
-        if(villagers.size() > 0) {
-            for(Villager villager : villagers) {
+        if(allVillagers.size() > 0) {
+            for(Villager villager : allVillagers) {
                 System.out.println(villager.getVillagerName());
             }
         } else {
@@ -429,7 +425,12 @@ public class StardewApplication {
     private Villager getVillagerSelectionFromUser() {
         System.out.println("Choose a Villager:");
         List<Villager> allVillagers = villagerDao.getVillagers();
-        return (Villager) Menu.getChoiceFromOptions(allVillagers.toArray());
+//        List<String> villagerNames = new ArrayList<>();
+//        for (Villager villager : allVillagers) {
+//            villagerNames.add(villager.getVillagerName());
+//        }
+//        return villagerDao.getVillagerById(Integer.parseInt(Menu.getChoiceFromOptions(villagerNames.toArray()).toString()));
+        return Menu.getVillagerChoiceFromOptions(allVillagers);
     }
 
     private void handleAddVillager() {
@@ -438,15 +439,15 @@ public class StardewApplication {
 
         Villager newVillager = new Villager();
         String villagerName = getUserInput("Enter the name of the new Villager." +
-                "\nLeave blank to skip.");
+                "\nDo not leave blank.");
         String marriageCandidate = getUserInput("Is the villager a marriage candidate? YES or NO" +
-                "\nLeave blank to skip.");
+                "\nDo not leave blank.");
         String birthday = getUserInput("Enter the new Villager's birthday." +
-                "\nLeave blank to skip.");
+                "\nDo not leave blank.");
         String lovedGiftString = getUserInput("Enter up to 12 things the villager loves (minimum 2), separated by a comma." +
-                "\nLeave blank to skip.");
+                "\nDo not leave blank.");
         String description = getUserInput("Enter a description for the villager." +
-                "\nLeave blank to skip.");
+                "\nDo not leave blank.");
         if (!villagerName.equals("")) {
             newVillager.setVillagerName(villagerName);
         }
@@ -479,7 +480,7 @@ public class StardewApplication {
                 "\nPlease enter yes or no, or leave blank to skip.");
         String updatedBirthday = getUserInput("Please enter the updated birthday for this Villager." +
                 "\nLeave blank to skip.");
-        String updatedLovedGifts = getUserInput("Please enter up to 12 loved gifts of the villager, separated by a comma." +
+        String updatedLovedGifts = getUserInput("Please enter up to 12 loved gifts of the villager (minimum two), separated by a comma. Fill in the rest with 'null'." +
                 "\nOr leave blank to skip.");
         String description = getUserInput("Please enter the updated description of the villager.");
         if (!newVillagerName.equals("")) {
@@ -544,7 +545,7 @@ public class StardewApplication {
     private Item getItemSelectionFromUser() {
         System.out.println("Choose a Villager:");
         List<Item> allItems = itemDao.getItems();
-        return (Item) Menu.getChoiceFromOptions(allItems.toArray());
+        return (Item) Menu.getItemChoiceFromOptions(allItems);
     }
 
     private void handleDisplayAllItems() {
@@ -561,11 +562,13 @@ public class StardewApplication {
     }
 
     private void handleDisplayMissingItems() {
+        System.out.println("All Missing Items");
+        System.out.println("--------------------------");
         List<Item> items = itemDao.getItems();
         if(items.size() > 0) {
             for(Item item : items) {
                 if (!item.isItemCompleted()) {
-                    System.out.println(item);
+                    System.out.print(item.getItemName() + " ");
                 }
             }
         } else {
@@ -574,11 +577,13 @@ public class StardewApplication {
     }
 
     private void handleDisplayCompletedItems() {
+        System.out.println("All Completed Items");
+        System.out.println("--------------------------");
         List<Item> items = itemDao.getItems();
         if(items.size() > 0) {
             for(Item item : items) {
                 if (item.isItemCompleted()) {
-                    System.out.println(item);
+                    System.out.println(item.getItemName());
                 }
             }
         } else {
@@ -589,11 +594,14 @@ public class StardewApplication {
     private void handleDisplayItemsByClassification() {
         Classification classification = getClassificationSelectionFromUser();
 
+        System.out.println("All " + classification + " Items");
+        System.out.println("--------------------------");
+
         List<Item> items = itemDao.getItems();
         if(items.size() > 0) {
             for(Item item : items) {
                 if (item.getItemClassification() == classification.getId()) {
-                    System.out.println(item);
+                    System.out.println(item.getItemName());
                 }
             }
         } else {
@@ -606,9 +614,9 @@ public class StardewApplication {
         System.out.println("--------------------------");
 
         Item newItem = new Item();
-        String itemName = getUserInput("Enter the name of the new item." +
+        String classification = getUserInput("Enter the classification id for the new item (1-12)." +
                 "\nLeave blank to skip.");
-        String classification = getUserInput("Enter the classification id for the new item" +
+        String itemName = getUserInput("Enter the name of the new item." +
                 "\nLeave blank to skip.");
         String completed = getUserInput("Enter whether or not the item is completed. YES OR NO" +
                 "\nLeave blank to skip.");
@@ -620,9 +628,7 @@ public class StardewApplication {
                 "\nLeave blank to skip.");
         String location = getUserInput("Enter the location the item is found at." +
                 "\nLeave blank to skip.");
-        String description = getUserInput("Enter a description for the villager." +
-                "\nLeave blank to skip.");
-        String achievementId = getUserInput("Enter the associated achievement id for the item." +
+        String description = getUserInput("Enter a description for the item." +
                 "\nLeave blank to skip.");
         if (!itemName.equals("")) {
             newItem.setItemName(itemName);
@@ -652,9 +658,6 @@ public class StardewApplication {
         if (!description.equals("")) {
             newItem.setItemDescription(description);
         }
-        if (!achievementId.equals("")) {
-            newItem.setItemAchievementId(Integer.parseInt(achievementId));
-        }
         newItem = itemDao.createItem(newItem);
         System.out.println("\n" + newItem.getItemName() + " added to the list of items!");
     }
@@ -663,7 +666,7 @@ public class StardewApplication {
         System.out.println("Update an Item on the list!");
         System.out.println("--------------------------");
 
-        Item updatedItem = new Item();
+        Item updatedItem = getItemSelectionFromUser();
         String itemName = getUserInput("Enter the updated name of the item." +
                 "\nLeave blank to skip.");
         String classification = getUserInput("Enter the classification id for the item" +
@@ -714,7 +717,7 @@ public class StardewApplication {
             updatedItem.setItemAchievementId(Integer.parseInt(achievementId));
         }
         updatedItem = itemDao.updateItem(updatedItem);
-        System.out.println("\n" + updatedItem.getItemName() + " added to the list of items!");
+        System.out.println("\n" + updatedItem.getItemName() + " has been updated!");
     }
 
     private void handleDeleteItem() {
@@ -749,7 +752,7 @@ public class StardewApplication {
     private Classification getClassificationSelectionFromUser() {
         System.out.println("Choose a Classification:");
         List<Classification> allClassifications = classificationDao.getClassifications();
-        return (Classification) Menu.getChoiceFromOptions(allClassifications.toArray());
+        return (Classification) Menu.getClassificationChoiceFromOptions(allClassifications);
     }
 
     private void handleDisplayAllClassifications() {
@@ -758,7 +761,7 @@ public class StardewApplication {
         List<Classification> allClassifications = classificationDao.getClassifications();
         if (allClassifications.size() > 0) {
             for (Classification classification : allClassifications) {
-                System.out.println(classification.getName());
+                System.out.println(classification.getClassificationName());
             }
         } else {
             System.out.println("\n*** No results ***");
@@ -773,10 +776,10 @@ public class StardewApplication {
         String classificationName = getUserInput("Enter the name of the new Classification." +
                 "\nLeave blank to skip.");
         if(!classificationName.equals("")) {
-            newClassification.setName(classificationName);
+            newClassification.setClassificationName(classificationName);
         }
         newClassification = classificationDao.createClassification(newClassification);
-        System.out.println("\n" + newClassification.getName() + " added to the list of Classifications!");
+        System.out.println("\n" + newClassification.getClassificationName() + " added to the list of Classifications!");
     }
 
     private void handleUpdateClassification() {
@@ -787,10 +790,10 @@ public class StardewApplication {
         String newClassificationName = getUserInput("Please enter the updated name of the Classification." +
                 "\nLeave blank to skip.");
         if (!newClassificationName.equals("")) {
-            selectedClassification.setName(newClassificationName);
+            selectedClassification.setClassificationName(newClassificationName);
         }
         selectedClassification = classificationDao.updateClassification(selectedClassification);
-        System.out.println("\n" + selectedClassification.getName() + " has been updated!");
+        System.out.println("\n" + selectedClassification.getClassificationName() + " has been updated!");
     }
 
     private void handleDeleteClassification() {
@@ -798,7 +801,7 @@ public class StardewApplication {
         Classification classificationToDelete = getClassificationSelectionFromUser();
 
         classificationDao.deleteClassificationById(classificationToDelete.getId());
-        System.out.println("\n" + classificationToDelete.getName() + " has been deleted!");
+        System.out.println("\n" + classificationToDelete.getClassificationName() + " has been deleted!");
     }
 
 

@@ -84,12 +84,16 @@ public class JdbcVillagerDao implements VillagerDao {
     @Override
     public Villager createVillager(Villager villager) {
         Villager newVillager = null;
-        String sql = "INSERT INTO villager (villager_id, name, marriage_candidate, birthday, loved1, loved2, loved3, loved4," +
+        String sql = "INSERT INTO villager (name, marriage_candidate, birthday, loved1, loved2, loved3, loved4," +
                 "loved5, loved6, loved7, loved8, loved9, loved10, loved11, loved12, description) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, " +
                 "?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING villager_id";
+        List<String> lovedList = villager.getVillagerLovedGifts();
         try {
-            int villagerId = template.queryForObject(sql, int.class, villager.getVillagerId());
+            int villagerId = template.queryForObject(sql, int.class, villager.getVillagerName(), villager.isVillagerMarriageCandidate(),
+                    villager.getVillagerBirthday(), lovedList.get(0), lovedList.get(1), lovedList.get(2), lovedList.get(3), lovedList.get(4),
+                    lovedList.get(5), lovedList.get(6), lovedList.get(7), lovedList.get(8), lovedList.get(9), lovedList.get(10),
+                    lovedList.get(11), villager.getVillagerDescription());
             newVillager = getVillagerById(villagerId);
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
@@ -105,14 +109,13 @@ public class JdbcVillagerDao implements VillagerDao {
     @Override
     public Villager updateVillager(Villager villager) {
         Villager updatedVillager = null;
-        String sql = "UPDATE villager (villager_id, name, marriage_candidate, birthday, loved1, loved2, loved3, loved4, " +
-                "loved5, loved6, loved7, loved8, loved9, loved10, loved11, loved12, description)" +
-                "SET (?, ?, ?, ?, ?, ?, ?, ?, " +
-                "?, ?, ?, ?, ?, ?, ?, ?, ?) WHERE villager_id = ?";
+        String sql = "UPDATE villager SET name = ?, marriage_candidate = ?, birthday = ?, loved1 = ?, loved2 = ?, loved3 = ?," +
+                "loved4 = ?, loved5 = ?, loved6 = ?, loved7 = ?, loved8 = ?, loved9 = ?, loved10 = ?," +
+                "loved11 = ?, loved12 = ?, description = ? WHERE villager_id = ?";
         List<String> loved = villager.getVillagerLovedGifts();
         // added loved gifts to a new List<String> so that they can be pulled and added to the updated villager
         try {
-            int rowsAffected = template.update(sql, villager.getVillagerId(), villager.getVillagerName(), villager.isVillagerMarriageCandidate(),
+            int rowsAffected = template.update(sql, villager.getVillagerName(), villager.isVillagerMarriageCandidate(),
                     villager.getVillagerBirthday(), loved.get(0), loved.get(1), loved.get(2), loved.get(3), loved.get(4), loved.get(5),
                     loved.get(6),loved.get(7),loved.get(8),loved.get(9),loved.get(10),loved.get(11), villager.getVillagerDescription(), villager.getVillagerId());
             if (rowsAffected == 0) {

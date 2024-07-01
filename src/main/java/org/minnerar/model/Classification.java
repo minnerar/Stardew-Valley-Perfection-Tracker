@@ -24,11 +24,11 @@ public class Classification {
         this.id = id;
     }
 
-    public String getName() {
+    public String getClassificationName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setClassificationName(String name) {
         this.name = name;
     }
 

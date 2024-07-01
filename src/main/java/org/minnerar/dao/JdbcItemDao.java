@@ -128,12 +128,12 @@ public class JdbcItemDao implements ItemDao {
     @Override
     public Item createItem(Item item) {
         Item newItem = null;
-        String sql = "INSERT INTO item (item_id, classification_id, name, completed, " +
-                "season, time, weather, location, description, achievement_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING item_id";
+        String sql = "INSERT INTO item (classification_id, name, completed, " +
+                "season, time, weather, location, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING item_id";
         try {
-            int itemId = template.queryForObject(sql, int.class, item.getItemId(), item.getItemClassification(), item.getItemName(),
+            int itemId = template.queryForObject(sql, int.class, item.getItemClassification(), item.getItemName(),
                     item.isItemCompleted(), item.getItemSeason(), item.getItemTime(), item.getItemWeather(),
-                    item.getItemLocation(), item.getItemDescription(), item.getItemAchievementId());
+                    item.getItemLocation(), item.getItemDescription());
             newItem = getItemById(itemId);
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
@@ -148,12 +148,12 @@ public class JdbcItemDao implements ItemDao {
     @Override
     public Item updateItem(Item item) {
         Item updatedItem = null;
-        String sql = "UPDATE item SET item_id = ?, classification_id = ?, name = ?, completed = ?, season = ?, " +
-                "time = ?, weather = ?, location = ?, description = ?, achievement_id = ? WHERE item_id = ?";
+        String sql = "UPDATE item SET classification_id = ?, name = ?, completed = ?, season = ?, " +
+                "time = ?, weather = ?, location = ?, description = ? WHERE item_id = ?";
         try {
-            int rowsAffected = template.update(sql, item.getItemId(), item.getItemClassification(), item.getItemName(),
+            int rowsAffected = template.update(sql, item.getItemClassification(), item.getItemName(),
                     item.isItemCompleted(), item.getItemSeason(), item.getItemTime(), item.getItemWeather(),
-                    item.getItemLocation(), item.getItemDescription(), item.getItemAchievementId(), item.getItemId());
+                    item.getItemLocation(), item.getItemDescription(), item.getItemId());
             if (rowsAffected == 0) {
                 throw new DaoException("Zero rows affected, expected at least one.");
             }
