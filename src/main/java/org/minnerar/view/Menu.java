@@ -132,7 +132,7 @@ public class Menu {
         Classification classification = null;
         while (classification == null) {
             displayClassificationMenuOptions(classifications);
-            classification = getClassificationChoiceFromOptions(classifications);
+            classification = getClassificationChoiceFromUserInput(classifications);
         }
         return classification;
     }
