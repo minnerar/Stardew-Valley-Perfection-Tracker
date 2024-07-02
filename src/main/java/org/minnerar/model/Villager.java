@@ -26,6 +26,33 @@ public class Villager {
     private String loved11;
     private String loved12;
 
+    public Villager(int id, String name, boolean marriageCandidate, String birthday, int heartCounter,
+                    String description, String loved1, String loved2, String loved3, String loved4,
+                    String loved5, String loved6, String loved7, String loved8, String loved9,
+                    String loved10, String loved11, String loved12) {
+        this.id = id;
+        this.name = name;
+        this.marriageCandidate = marriageCandidate;
+        this.birthday = birthday;
+        this.heartCounter = heartCounter;
+        this.lovedGifts = lovedGifts;
+        this.description = description;
+        this.loved1 = loved1;
+        this.loved2 = loved2;
+        this.loved3 = loved3;
+        this.loved4 = loved4;
+        this.loved5 = loved5;
+        this.loved6 = loved6;
+        this.loved7 = loved7;
+        this.loved8 = loved8;
+        this.loved9 = loved9;
+        this.loved10 = loved10;
+        this.loved11 = loved11;
+        this.loved12 = loved12;
+    }
+
+    public Villager() {
+    }
 
     public int getVillagerId() {
         return id;
