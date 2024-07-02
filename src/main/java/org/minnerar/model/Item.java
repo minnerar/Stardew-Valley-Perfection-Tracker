@@ -13,10 +13,9 @@ public class Item {
     private String weather;
     private String location;
     private String description;
-    private int achievementId;
 
     public Item(int id, int classification, String name, boolean completed, String season,
-                String time, String weather, String location, String description, int achievementId) {
+                String time, String weather, String location, String description) {
         this.id = id;
         this.classification = classification;
         this.name = name;
@@ -26,7 +25,6 @@ public class Item {
         this.weather = weather;
         this.location = location;
         this.description = description;
-        this.achievementId = achievementId;
     }
 
     public Item(String name, String description) {
@@ -108,14 +106,6 @@ public class Item {
         this.description = description;
     }
 
-    public int getItemAchievementId() {
-        return achievementId;
-    }
-
-    public void setItemAchievementId(int achievementId) {
-        this.achievementId = achievementId;
-    }
-
     @Override
     public String toString() {
         return "Item{" +
@@ -128,7 +118,6 @@ public class Item {
                 ", weather='" + weather + '\'' +
                 ", location='" + location + '\'' +
                 ", description='" + description + '\'' +
-                ", achievementId=" + achievementId +
                 '}';
     }
 
@@ -138,7 +127,7 @@ public class Item {
         if (o == null || getClass() != o.getClass()) return false;
         Item item = (Item) o;
         return id == item.id && classification == item.classification && completed == item.completed &&
-                achievementId == item.achievementId && Objects.equals(name, item.name) &&
+                Objects.equals(name, item.name) &&
                 Objects.equals(season, item.season) && Objects.equals(time, item.time) &&
                 Objects.equals(weather, item.weather) && Objects.equals(location, item.location) &&
                 Objects.equals(description, item.description);
@@ -146,6 +135,6 @@ public class Item {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, classification, name, completed, season, time, weather, location, description, achievementId);
+        return Objects.hash(id, classification, name, completed, season, time, weather, location, description);
     }
 }

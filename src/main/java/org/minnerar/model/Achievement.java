@@ -3,18 +3,17 @@ package org.minnerar.model;
 import java.util.Objects;
 
 public class Achievement {
-
-    private int id;
     private String name;
     private int totalNeeded;
     private double current;
     private String description;
     private int progress;
+    private int achievementId;
 
     public Achievement() {}
 
-    public Achievement(int id, String name, int totalNeeded, int progress, String description) {
-        this.id = id;
+    public Achievement(int achievementId, String name, int totalNeeded, int progress, String description) {
+        this.achievementId = achievementId;
         this.name = name;
         this.progress = progress;
         this.totalNeeded = totalNeeded;
@@ -23,11 +22,11 @@ public class Achievement {
     }
 
     public int getAchievementId() {
-        return id;
+        return achievementId;
     }
 
     public void setAchievementId(int id) {
-        this.id = id;
+        this.achievementId = id;
     }
 
     public String getAchievementName() {
@@ -73,7 +72,7 @@ public class Achievement {
     @Override
     public String toString() {
         return "Achievement{" +
-                "id=" + id +
+                "id=" + achievementId +
                 ", name='" + name + '\'' +
                 ", totalNeeded=" + totalNeeded +
                 ", current=" + current +
@@ -87,13 +86,13 @@ public class Achievement {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Achievement that = (Achievement) o;
-        return id == that.id && totalNeeded == that.totalNeeded &&
+        return achievementId == that.achievementId && totalNeeded == that.totalNeeded &&
                 current == that.current && Double.compare(that.progress, progress) == 0 &&
                 Objects.equals(name, that.name) && Objects.equals(description, that.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, totalNeeded, current, description, progress);
+        return Objects.hash(achievementId, name, totalNeeded, current, description, progress);
     }
 }

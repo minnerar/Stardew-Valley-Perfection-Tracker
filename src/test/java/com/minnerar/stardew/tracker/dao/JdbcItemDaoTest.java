@@ -15,10 +15,10 @@ import static java.lang.Boolean.TRUE;
 
 public class JdbcItemDaoTest extends BaseDaoTest {
 
-    private Item TEST_ITEM_ONE = new Item(1, 4, "Test Item One", FALSE, "Spring", "Any", "Rain", "Forest", "Test Item 1 Description", 1);
-    private Item TEST_ITEM_TWO = new Item(2, 3, "Test Item Two", TRUE, "Summer", "Morning", "Sunny", "Mountain River", "Test Item 2 Description", 2);
-    private Item TEST_ITEM_THREE = new Item(3, 2, "Test Item Three", TRUE, "Fall", "Evening", "Windy", "Ocean", "Test Item 3 Description", 4);
-    private Item TEST_ITEM_FOUR = new Item(4, 1, "Test Item Four", FALSE, "Winter", "Afternoon", "Snow", "Mines", "Test Item 4 Description", 3);
+    private Item TEST_ITEM_ONE = new Item(1, 4, "Test Item One", FALSE, "Spring", "Any", "Rain", "Forest", "Test Item 1 Description");
+    private Item TEST_ITEM_TWO = new Item(2, 3, "Test Item Two", TRUE, "Summer", "Morning", "Sunny", "Mountain River", "Test Item 2 Description");
+    private Item TEST_ITEM_THREE = new Item(3, 2, "Test Item Three", TRUE, "Fall", "Evening", "Windy", "Ocean", "Test Item 3 Description");
+    private Item TEST_ITEM_FOUR = new Item(4, 1, "Test Item Four", FALSE, "Winter", "Afternoon", "Snow", "Mines", "Test Item 4 Description");
 
     private JdbcItemDao sut;
     private JdbcItemDao invalidConnectionDao;
@@ -100,7 +100,6 @@ public class JdbcItemDaoTest extends BaseDaoTest {
         existing.setItemWeather("Windy");
         existing.setItemLocation("Ocean");
         existing.setItemDescription("Test Item 3 Description");
-        existing.setItemAchievementId(4);
 
         Item updated = sut.createItem(existing);
         Assert.assertNotNull("updateItem returned a null Item.", updated);

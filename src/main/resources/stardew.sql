@@ -4,10 +4,10 @@ START TRANSACTION;
 
 -- Drop tables if they exist
 DROP TABLE IF EXISTS item_classification, achievement_item, item, villager, skill, achievement, classification CASCADE;
-DROP SEQUENCE IF EXISTS achievement_serial, item_serial, villager_serial, classification_serial, skill_serial;
+DROP SEQUENCE IF EXISTS item_serial, villager_serial, classification_serial, skill_serial;
 
 -- Create serials
-CREATE SEQUENCE achievement_serial;
+--CREATE SEQUENCE achievement_serial;
 CREATE SEQUENCE item_serial;
 CREATE SEQUENCE villager_serial;
 CREATE SEQUENCE classification_serial;
@@ -16,7 +16,7 @@ CREATE SEQUENCE skill_serial;
 
 -- Create Achievement Table
 CREATE TABLE achievement (
-	achievement_id int NOT NULL DEFAULT nextval('achievement_serial'),
+	achievement_id int NOT NULL,
 	name varchar(80) NOT NULL,          -- Name of the achievement
 	progress int NOT NULL DEFAULT 0,    -- Current completion progress
 	current int NOT NULL DEFAULT 0,		-- Progress / total_needed 
@@ -106,21 +106,22 @@ CREATE TABLE achievement_item (
 -- INSERT STATEMENTS 
 
 -- Insert values for achievement table
-INSERT INTO achievement (name, description, total_needed)
-VALUES 
-('Produce & Forage Shipped', 'Ship one of every item in the Items Shipped (Farm & Forage) tab in the collections menu.', 155),
-('Obelisks on Farm', 'Build Earth Obelisk, Water Obelisk, Desert Obelisk, and Island Obelisk on the farm.', 4),
-('Golden Clock on Farm', 'Build Gold Clock on the farm.', 1),
-('Monster Slayer Hero', 'Complete all monster eradication goals for the Adventurers Guild.', 12),
-('Great Friends', 'Reach maximum hearts with every villager. This includes Kent, so it is not possible to complete this in year 1. 
+INSERT INTO achievement (achievement_id, name, description, total_needed)
+VALUES
+(0, 'Empty Achievement', 'Empty Achievement to catch deleted Achievements.', 0);
+(1, 'Produce & Forage Shipped', 'Ship one of every item in the Items Shipped (Farm & Forage) tab in the collections menu.', 155),
+(2, 'Obelisks on Farm', 'Build Earth Obelisk, Water Obelisk, Desert Obelisk, and Island Obelisk on the farm.', 4),
+(3, 'Golden Clock on Farm', 'Build Gold Clock on the farm.', 1),
+(4, 'Monster Slayer Hero', 'Complete all monster eradication goals for the Adventurers Guild.', 12),
+(5, 'Great Friends', 'Reach maximum hearts with every villager. This includes Kent, so it is not possible to complete this in year 1.
  Note: The maximum hearts for datable villagers is 8, and for non-datable villagers, 10 is the max. 
  If the player has children, their friendship status does not affect the score.', 34),
-('Farmer Level', 'Reach level 10 in every skill.', 25),
-('Found All Stardrops', 'Find all Stardrops.', 7),
-('Cooking Recipes Made', 'Cook every recipe.', 81),
-('Crafting Recipes Made', 'Craft all items. In single-player, the Wedding Ring is not required.', 149),
-('Fish Caught', 'Catch every fish in the Fish tab in the collections menu.', 72),
-('Golden Walnuts Found', 'Find all Golden Walnuts on Ginger Island.', 130);
+(6, 'Farmer Level', 'Reach level 10 in every skill.', 25),
+(7, 'Found All Stardrops', 'Find all Stardrops.', 7),
+(8, 'Cooking Recipes Made', 'Cook every recipe.', 81),
+(9, 'Crafting Recipes Made', 'Craft all items. In single-player, the Wedding Ring is not required.', 149),
+(10, 'Fish Caught', 'Catch every fish in the Fish tab in the collections menu.', 72),
+(11, 'Golden Walnuts Found', 'Find all Golden Walnuts on Ginger Island.', 130);
 
 -- insert values for classification table
 INSERT INTO classification (name)

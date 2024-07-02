@@ -52,7 +52,7 @@ public class JdbcAchievementDaoTest extends BaseDaoTest {
         // create a new Achievement to track in the game
         // return the achievement object with the updated fields
         Achievement newAchievement = new Achievement();
-        newAchievement.setAchievementId(1);
+        newAchievement.setAchievementId(10);
         newAchievement.setAchievementName("Test Achievement One");
         newAchievement.setAchievementProgress(0);
         newAchievement.setAchievementTotalNeeded(100);
@@ -63,7 +63,7 @@ public class JdbcAchievementDaoTest extends BaseDaoTest {
         Assert.assertNotNull("createAchievement returned a null employee", createdAchievement);
         Assert.assertTrue("createAchievement did not return an employee with id set.", createdAchievement.getAchievementId() > 0);
         Assert.assertEquals("createAchievement did not return an achievement with the correct name.", newAchievement.getAchievementName(), createdAchievement.getAchievementName());
-        Assert.assertEquals("createAchievement did not return an achievement with the correct current amount.", newAchievement.getAchievementCurrent(), createdAchievement.getAchievementCurrent());
+        Assert.assertEquals("createAchievement did not return an achievement with the correct current amount.", newAchievement.getAchievementCurrent(), createdAchievement.getAchievementCurrent(), 0);
         Assert.assertEquals("createAchievement did not return an achievement with the correct total needed amount.", newAchievement.getAchievementTotalNeeded(), createdAchievement.getAchievementTotalNeeded());
         Assert.assertEquals("createAchievement did not return an achievement with the correct description.", newAchievement.getAchievementDescription(), createdAchievement.getAchievementDescription());
 
@@ -101,12 +101,12 @@ public class JdbcAchievementDaoTest extends BaseDaoTest {
         int rowsAffected = sut.deleteAchievementById(TEST_ACHIEVEMENT_THREE.getAchievementId());
         Assert.assertEquals("deleteAchievement did not return the correct number of rows affected.", 1, rowsAffected);
         Achievement retrievedAchievement = getAchievementByIdTestVerification(TEST_ACHIEVEMENT_THREE.getAchievementId());
-        Assert.assertNotNull("deleteAchievement did not remove the employee from the database.", retrievedAchievement);
+        Assert.assertNull("deleteAchievement did not remove the employee from the database.", retrievedAchievement);
     }
 
     public void assertAchievementsMatch(String message, Achievement expected, Achievement actual) {
         Assert.assertEquals(message, expected.getAchievementId(), actual.getAchievementId());
-        Assert.assertEquals(message, expected.getAchievementCurrent(), actual.getAchievementCurrent());
+        Assert.assertEquals(message, expected.getAchievementCurrent(), actual.getAchievementCurrent(), 0);
         Assert.assertEquals(message, expected.getAchievementDescription(), actual.getAchievementDescription());
         Assert.assertEquals(message, expected.getAchievementName(), actual.getAchievementName());
         Assert.assertEquals(message, expected.getAchievementTotalNeeded(), actual.getAchievementTotalNeeded());

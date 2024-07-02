@@ -57,10 +57,10 @@ public class JdbcAchievementDao implements AchievementDao {
     public Achievement createAchievement(Achievement achievement) {
         Achievement newAchievement = null;
 
-        String sql = "INSERT INTO achievement (name, total_needed, progress, current, description) VALUES (?, ?, ?, ?, ?) RETURNING achievement_id";
+        String sql = "INSERT INTO achievement (achievement_id, name, total_needed, progress, current, description) VALUES (?, ?, ?, ?, ?, ?) RETURNING achievement_id";
 
         try {
-            int achievementId = template.queryForObject(sql, int.class, achievement.getAchievementName(),
+            int achievementId = template.queryForObject(sql, int.class, achievement.getAchievementId(), achievement.getAchievementName(),
                     achievement.getAchievementTotalNeeded(), achievement.getAchievementProgress(), achievement.getAchievementCurrent(), achievement.getAchievementDescription());
             newAchievement = getAchievementById(achievementId);
         } catch (CannotGetJdbcConnectionException e) {
@@ -102,9 +102,9 @@ public class JdbcAchievementDao implements AchievementDao {
     public int deleteAchievementById(int id) {
         int numberOfRows = 0;
         String deleteAchievementSql = "DELETE FROM achievement WHERE achievement_id = ?";
-        String updateAchievement = "UPDATE achievement_item SET achievement_id = 0 WHERE achievement_id = ?";
+        String updateItemAchievement = "UPDATE achievement_item SET achievement_id = 0 WHERE achievement_id = ?";
         try {
-            template.update(updateAchievement, id);
+            template.update(updateItemAchievement, id);
             numberOfRows = template.update(deleteAchievementSql, id);
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);

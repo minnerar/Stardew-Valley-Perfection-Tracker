@@ -23,7 +23,7 @@ public class TestingDatabaseConfig {
     private static final String DB_PORT =
             Objects.requireNonNullElse(System.getenv("DB_PORT"), "5432");
     private static final String DB_NAME =
-            Objects.requireNonNullElse(System.getenv("DB_NAME"), "StardewValleyPerfectionTrackerTesting");
+            Objects.requireNonNullElse(System.getenv("DB_NAME"), "StardewTesting");
     private static final String DB_USERNAME =
             Objects.requireNonNullElse(System.getenv("DB_USERNAME"), "postgres");
     private static final String DB_PASSWORD =
@@ -37,7 +37,7 @@ public class TestingDatabaseConfig {
     public void setup() {
         if (System.getenv("DB_HOST") == null) {
             adminDataSource = new SingleConnectionDataSource();
-            adminDataSource.setUrl("jdbc:postgresql://localhost:5432/StardewValleyPerfectionTrackerTesting");
+            adminDataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
             adminDataSource.setUsername("postgres");
             adminDataSource.setPassword("postgres1");
             adminJdbcTemplate = new JdbcTemplate(adminDataSource);

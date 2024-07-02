@@ -275,11 +275,13 @@ public class StardewApplication {
         System.out.println("--------------------------");
 
         Achievement newAchievement = new Achievement();
+        String achievementId = getUserInput("Enter the Achievement ID of the new Achievement.");
         String achievementName = getUserInput("Enter the name of the new Achievement.");
         String achievementTotalNeeded = getUserInput("Enter the total needed to complete the Achievement.");
         String achievementCurrentProgress = getUserInput("Enter the current Achievement progress.");
         String achievementDescription = getUserInput("Enter the Achievement's Description.");
 
+        newAchievement.setAchievementId(Integer.parseInt(achievementId));
         newAchievement.setAchievementName(achievementName);;
         newAchievement.setAchievementTotalNeeded(Integer.parseInt(achievementTotalNeeded));
         newAchievement.setAchievementProgress(Integer.parseInt(achievementCurrentProgress));
@@ -683,8 +685,6 @@ public class StardewApplication {
                 "\nLeave blank to skip.");
         String description = getUserInput("Enter an updated description for the villager." +
                 "\nLeave blank to skip.");
-        String achievementId = getUserInput("Enter the updated associated achievement id for the item." +
-                "\nLeave blank to skip.");
         if (!itemName.equals("")) {
             updatedItem.setItemName(itemName);
         }
@@ -712,9 +712,6 @@ public class StardewApplication {
         }
         if (!description.equals("")) {
             updatedItem.setItemDescription(description);
-        }
-        if (!achievementId.equals("")) {
-            updatedItem.setItemAchievementId(Integer.parseInt(achievementId));
         }
         updatedItem = itemDao.updateItem(updatedItem);
         System.out.println("\n" + updatedItem.getItemName() + " has been updated!");
