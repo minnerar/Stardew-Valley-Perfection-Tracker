@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
+import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,9 +18,14 @@ public class JdbcItemDao implements ItemDao {
 
     private final JdbcTemplate template;
 
+    public JdbcItemDao(DataSource dataSource) {
+        this.template = new JdbcTemplate(dataSource);
+    }
+
     public JdbcItemDao(JdbcTemplate template) {
         this.template = template;
     }
+
     @Override
     public Item getItemById(int id) {
         Item item = null;
@@ -110,6 +116,23 @@ public class JdbcItemDao implements ItemDao {
         return items;
     }
 
+//    public int getItemClassificationByItemId(int id) {
+//        int classification = 0;
+//
+//        String sql = "SELECT classification_id FROM item_classification WHERE item_id = ? RETURNING classification_id";
+//
+//        try {
+//            SqlRowSet results = template.queryForRowSet(sql, id);
+//            while (results.next()) {
+//                classification = results.getInt("classification_id");
+//            }
+//        } catch (CannotGetJdbcConnectionException e) {
+//            throw new DaoException("Unable to connect to server or database.", e);
+//        }
+//
+//        return classification;
+//    }
+
     @Override
     public List<Item> getItemsByAchievementId(int id) {
         List<Item> items = new ArrayList<>();
@@ -128,10 +151,10 @@ public class JdbcItemDao implements ItemDao {
     @Override
     public Item createItem(Item item) {
         Item newItem = null;
-        String sql = "INSERT INTO item (classification_id, name, completed, " +
+        String sql = "INSERT INTO item (item_id, name, completed, " +
                 "season, time, weather, location, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING item_id";
         try {
-            int itemId = template.queryForObject(sql, int.class, item.getItemClassification(), item.getItemName(),
+            int itemId = template.queryForObject(sql, int.class, item.getItemId(), item.getItemName(),
                     item.isItemCompleted(), item.getItemSeason(), item.getItemTime(), item.getItemWeather(),
                     item.getItemLocation(), item.getItemDescription());
             newItem = getItemById(itemId);
@@ -148,10 +171,10 @@ public class JdbcItemDao implements ItemDao {
     @Override
     public Item updateItem(Item item) {
         Item updatedItem = null;
-        String sql = "UPDATE item SET classification_id = ?, name = ?, completed = ?, season = ?, " +
+        String sql = "UPDATE item SET item_id = ?, name = ?, completed = ?, season = ?, " +
                 "time = ?, weather = ?, location = ?, description = ? WHERE item_id = ?";
         try {
-            int rowsAffected = template.update(sql, item.getItemClassification(), item.getItemName(),
+            int rowsAffected = template.update(sql, item.getItemId(), item.getItemName(),
                     item.isItemCompleted(), item.getItemSeason(), item.getItemTime(), item.getItemWeather(),
                     item.getItemLocation(), item.getItemDescription(), item.getItemId());
             if (rowsAffected == 0) {
@@ -172,7 +195,7 @@ public class JdbcItemDao implements ItemDao {
     public int deleteItem(int id) {
         int numberOfRows = 0;
 
-        String deleteItemSql = "DELETE FROM item WHERE item_id = ?";
+        String deleteItemSql = "UPDATE item SET item_id = 0 WHERE item_id = ?";
         String updateItemClassification = "UPDATE item_classification SET item_id = 0 WHERE item_id = ?";
         String updateItemAchievement = "UPDATE achievement_item SET item_id = 0 WHERE item_id = ?";
 
@@ -198,7 +221,6 @@ public class JdbcItemDao implements ItemDao {
         item.setItemWeather(results.getString("weather"));
         item.setItemLocation(results.getString("location"));
         item.setItemDescription(results.getString("description"));
-        item.setItemClassification(results.getInt("classification_id"));
         return item;
     }
 

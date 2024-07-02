@@ -4,11 +4,11 @@ import java.util.Objects;
 
 public class Classification {
 
-    private int id;
+    private int classificationId;
     private String name;
 
     public Classification(int id, String name) {
-        this.id = id;
+        this.classificationId = id;
         this.name = name;
     }
 
@@ -16,12 +16,12 @@ public class Classification {
 
     }
 
-    public int getId() {
-        return id;
+    public int getClassificationId() {
+        return classificationId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setClassificationId(int id) {
+        this.classificationId = id;
     }
 
     public String getClassificationName() {
@@ -35,7 +35,7 @@ public class Classification {
     @Override
     public String toString() {
         return "Classification{" +
-                "id=" + id +
+                "id=" + classificationId +
                 ", name='" + name + '\'' +
                 '}';
     }
@@ -45,11 +45,11 @@ public class Classification {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Classification that = (Classification) o;
-        return id == that.id && Objects.equals(name, that.name);
+        return classificationId == that.classificationId && Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(classificationId, name);
     }
 }

@@ -14,7 +14,7 @@ public class Item {
     private String location;
     private String description;
 
-    public Item(int id, int classification, String name, boolean completed, String season,
+    public Item(int id, String name, boolean completed, String season,
                 String time, String weather, String location, String description) {
         this.id = id;
         this.classification = classification;
@@ -42,13 +42,13 @@ public class Item {
         this.id = id;
     }
 
-    public int getItemClassification() {
-        return classification;
-    }
-
-    public void setItemClassification(int classification) {
-        this.classification = classification;
-    }
+//    public int getItemClassification() {
+//        return getItemClassification();
+//    }
+//
+//    public void setItemClassification(int classification) {
+//        this.classification = classification;
+//    }
 
     public String getItemName() {
         return name;

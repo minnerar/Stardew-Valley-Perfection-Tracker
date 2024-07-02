@@ -3,6 +3,7 @@ package com.minnerar.stardew.tracker.dao;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.minnerar.dao.JdbcAchievementDao;
 import org.minnerar.dao.JdbcVillagerDao;
 import org.minnerar.model.Villager;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -38,17 +39,15 @@ public class JdbcVillagerDaoTest extends BaseDaoTest {
 
     @Before
     public void setup() {
-        sut = new JdbcVillagerDao((JdbcTemplate) dataSource);
-        // wont work without casting to JdbcTemplate
-        invalidConnectionDao = new JdbcVillagerDao((JdbcTemplate) invalidDataSource);
-        // wont work without casting to JdbcTemplate
+        sut = new JdbcVillagerDao(dataSource);
+        invalidConnectionDao = new JdbcVillagerDao(invalidDataSource);
     }
 
     public Villager getVillagerByIdTestVerification(int id) {
         // get an Villager by the Villager id
         // return all Villager information
         Villager actual = null;
-        String sql = "SELECT * FROM Villager WHERE villager = ?";
+        String sql = "SELECT * FROM villager WHERE villager_id = ?";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, id);
         if (results.next()) {
@@ -82,7 +81,7 @@ public class JdbcVillagerDaoTest extends BaseDaoTest {
         Assert.assertEquals(message, expected.getVillagerName(), actual.getVillagerName());
         Assert.assertEquals(message, expected.getVillagerBirthday(), actual.getVillagerBirthday());
         Assert.assertEquals(message, expected.isVillagerMarriageCandidate(), actual.isVillagerMarriageCandidate());
-        Assert.assertEquals(message, expected.getVillagerLovedGifts(), actual.getVillagerLovedGifts());
+        Assert.assertEquals(message, expected, actual);
         Assert.assertEquals(message, expected.getVillagerDescription(), actual.getVillagerDescription());
     }
 
@@ -111,10 +110,10 @@ public class JdbcVillagerDaoTest extends BaseDaoTest {
     public void updateVillagerTest(){
         //    ('Sophie', TRUE, 'Winter 28', 'Adventure', 'Sewing', 'Cooking', 'Calcifer', 'Howl', 'Magic', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'An ordinary girl.');
         Villager existing = new Villager();
-        existing.setVillagerId(TEST_VILLAGER_TWO.getVillagerId());
+        existing.setVillagerId(7);
         existing.setVillagerName("Sophie");
         existing.setVillagerMarriageCandidate(TRUE);
-        List<String> lovedGifts = new ArrayList<>();
+        List<String> lovedGifts = new ArrayList<>(12);
             lovedGifts.add("Adventure");
             lovedGifts.add("Sewing");
             lovedGifts.add("Cooking");
@@ -140,7 +139,7 @@ public class JdbcVillagerDaoTest extends BaseDaoTest {
         int rowsAffected = sut.deleteVillager(TEST_VILLAGER_THREE.getVillagerId());
         Assert.assertEquals("deleteVillager did not return the correct number of rows affected.", 1, rowsAffected);
         Villager retrieved = getVillagerByIdTestVerification(TEST_VILLAGER_THREE.getVillagerId());
-        Assert.assertNotNull("deleteVillager did not remove the Villager from the database.", retrieved);
+        Assert.assertNull("deleteVillager did not remove the Villager from the database.", retrieved);
     }
 
 }

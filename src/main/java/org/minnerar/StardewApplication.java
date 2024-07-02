@@ -528,9 +528,11 @@ public class StardewApplication {
                 handleDisplayMissingItems(); // displays all the missing items
             } else if(choice.equals(ITEM_DISPLAY_MENU_COMPLETED)) {
                 handleDisplayCompletedItems(); // displays all the completed items
-            } else if(choice.equals(ITEM_DISPLAY_BY_CLASSIFICATION)) {
-                handleDisplayItemsByClassification(); // displays the items by classification
-            } else if(choice.equals(ITEM_DISPLAY_ADD_ITEM)) {
+            }
+//            else if(choice.equals(ITEM_DISPLAY_BY_CLASSIFICATION)) {
+//                handleDisplayItemsByClassification(); // displays the items by classification
+//            }
+            else if(choice.equals(ITEM_DISPLAY_ADD_ITEM)) {
                 handleAddItem(); // add an item
             } else if(choice.equals(ITEM_DISPLAY_UPDATED_ITEM)) {
                 handleUpdateItem(); // update an item
@@ -593,30 +595,30 @@ public class StardewApplication {
         }
     }
 
-    private void handleDisplayItemsByClassification() {
-        Classification classification = getClassificationSelectionFromUser();
-
-        System.out.println("All " + classification + " Items");
-        System.out.println("--------------------------");
-
-        List<Item> items = itemDao.getItems();
-        if(items.size() > 0) {
-            for(Item item : items) {
-                if (item.getItemClassification() == classification.getId()) {
-                    System.out.println(item.getItemName());
-                }
-            }
-        } else {
-            System.out.println("\n*** No results ***");
-        }
-    }
+//    private void handleDisplayItemsByClassification() {
+//        Classification classification = getClassificationSelectionFromUser();
+//
+//        System.out.println("All " + classification + " Items");
+//        System.out.println("--------------------------");
+//
+//        List<Item> items = itemDao.getItems();
+//        if(items.size() > 0) {
+//            for(Item item : items) {
+//                if (item.getItemClassification() == classification.getClassificationId()) {
+//                    System.out.println(item.getItemName());
+//                }
+//            }
+//        } else {
+//            System.out.println("\n*** No results ***");
+//        }
+//    }
 
     private void handleAddItem() {
         System.out.println("Add a New Item the list!");
         System.out.println("--------------------------");
 
         Item newItem = new Item();
-        String classification = getUserInput("Enter the classification id for the new item (1-12)." +
+        String newItemID = getUserInput("Enter the ID for the new item." +
                 "\nLeave blank to skip.");
         String itemName = getUserInput("Enter the name of the new item." +
                 "\nLeave blank to skip.");
@@ -632,12 +634,15 @@ public class StardewApplication {
                 "\nLeave blank to skip.");
         String description = getUserInput("Enter a description for the item." +
                 "\nLeave blank to skip.");
+        if (!newItemID.equals("")) {
+            newItem.setItemId(Integer.parseInt(newItemID));
+        }
         if (!itemName.equals("")) {
             newItem.setItemName(itemName);
         }
-        if (!classification.equals("")) {
-            newItem.setItemClassification(Integer.parseInt(classification));
-        }
+//        if (!classification.equals("")) {
+//            newItem.setItemClassification(Integer.parseInt(classification));
+//        }
         if (!completed.equals("")) {
             if (completed.equalsIgnoreCase("yes")) {
                 newItem.setItemCompleted(true);
@@ -669,10 +674,12 @@ public class StardewApplication {
         System.out.println("--------------------------");
 
         Item updatedItem = getItemSelectionFromUser();
+        String updatedId = getUserInput("Enter the updated ID of the item." +
+                "\nLeave blank to skip.");
         String itemName = getUserInput("Enter the updated name of the item." +
                 "\nLeave blank to skip.");
-        String classification = getUserInput("Enter the classification id for the item" +
-                "\nLeave blank to skip.");
+//        String classification = getUserInput("Enter the classification id for the item" +
+//                "\nLeave blank to skip.");
         String completed = getUserInput("Update whether or not the item is completed. YES OR NO" +
                 "\nLeave blank to skip.");
         String season = getUserInput("Enter the updated season the item is found during." +
@@ -685,12 +692,15 @@ public class StardewApplication {
                 "\nLeave blank to skip.");
         String description = getUserInput("Enter an updated description for the villager." +
                 "\nLeave blank to skip.");
+        if (!updatedId.equals("")) {
+            updatedItem.setItemId(Integer.parseInt(updatedId));
+        }
         if (!itemName.equals("")) {
             updatedItem.setItemName(itemName);
         }
-        if (!classification.equals("")) {
-            updatedItem.setItemClassification(Integer.parseInt(classification));
-        }
+//        if (!classification.equals("")) {
+//            updatedItem.setItemClassification(Integer.parseInt(classification));
+//        }
         if (!completed.equals("")) {
             if (completed.equalsIgnoreCase("yes")) {
                 updatedItem.setItemCompleted(true);
@@ -772,6 +782,11 @@ public class StardewApplication {
         Classification newClassification = new Classification();
         String classificationName = getUserInput("Enter the name of the new Classification." +
                 "\nLeave blank to skip.");
+        String classificationId = getUserInput("Enter the ID of the new Classification." +
+                "\nLeave blank to skip.");
+        if(!classificationId.equals("")) {
+            newClassification.setClassificationId(Integer.parseInt(classificationId));
+        }
         if(!classificationName.equals("")) {
             newClassification.setClassificationName(classificationName);
         }
@@ -784,8 +799,12 @@ public class StardewApplication {
         System.out.println("--------------------------");
 
         Classification selectedClassification = getClassificationSelectionFromUser();
+        String newClassificationId = getUserInput("Please enter the updated ID of the Classification.");
         String newClassificationName = getUserInput("Please enter the updated name of the Classification." +
                 "\nLeave blank to skip.");
+        if (!newClassificationId.equals("")) {
+            selectedClassification.setClassificationId(Integer.parseInt(newClassificationId));
+        }
         if (!newClassificationName.equals("")) {
             selectedClassification.setClassificationName(newClassificationName);
         }
@@ -797,7 +816,7 @@ public class StardewApplication {
         System.out.println("Delete a Classification");
         Classification classificationToDelete = getClassificationSelectionFromUser();
 
-        classificationDao.deleteClassificationById(classificationToDelete.getId());
+        classificationDao.deleteClassificationById(classificationToDelete.getClassificationId());
         System.out.println("\n" + classificationToDelete.getClassificationName() + " has been deleted!");
     }
 

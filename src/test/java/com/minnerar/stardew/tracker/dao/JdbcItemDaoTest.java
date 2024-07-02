@@ -3,9 +3,7 @@ package com.minnerar.stardew.tracker.dao;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.minnerar.dao.JdbcClassificationDao;
 import org.minnerar.dao.JdbcItemDao;
-import org.minnerar.model.Classification;
 import org.minnerar.model.Item;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
@@ -15,19 +13,19 @@ import static java.lang.Boolean.TRUE;
 
 public class JdbcItemDaoTest extends BaseDaoTest {
 
-    private Item TEST_ITEM_ONE = new Item(1, 4, "Test Item One", FALSE, "Spring", "Any", "Rain", "Forest", "Test Item 1 Description");
-    private Item TEST_ITEM_TWO = new Item(2, 3, "Test Item Two", TRUE, "Summer", "Morning", "Sunny", "Mountain River", "Test Item 2 Description");
-    private Item TEST_ITEM_THREE = new Item(3, 2, "Test Item Three", TRUE, "Fall", "Evening", "Windy", "Ocean", "Test Item 3 Description");
-    private Item TEST_ITEM_FOUR = new Item(4, 1, "Test Item Four", FALSE, "Winter", "Afternoon", "Snow", "Mines", "Test Item 4 Description");
+    private Item TEST_ITEM_ONE = new Item(1, "Test Item One", FALSE, "Spring", "Any", "Rain", "Forest", "Test Item 1 Description");
+    private Item TEST_ITEM_TWO = new Item(2, "Test Item Two", TRUE, "Summer", "Morning", "Sunny", "Mountain River", "Test Item 2 Description");
+    private Item TEST_ITEM_THREE = new Item(3, "Test Item Three", TRUE, "Fall", "Evening", "Windy", "Ocean", "Test Item 3 Description");
+    private Item TEST_ITEM_FOUR = new Item(4, "Test Item Four", FALSE, "Winter", "Afternoon", "Snow", "Mines", "Test Item 4 Description");
 
     private JdbcItemDao sut;
     private JdbcItemDao invalidConnectionDao;
 
     @Before
     public void setup() {
-        sut = new JdbcItemDao((JdbcTemplate) dataSource);
+        sut = new JdbcItemDao(dataSource);
         // wont work without casting to JdbcTemplate
-        invalidConnectionDao = new JdbcItemDao((JdbcTemplate) invalidDataSource);
+        invalidConnectionDao = new JdbcItemDao(invalidDataSource);
         // wont work without casting to JdbcTemplate
     }
 
@@ -89,12 +87,12 @@ public class JdbcItemDaoTest extends BaseDaoTest {
     public void updateItemTest(){
         // removes an Item from the database
         // returns the number of updated Items
-        // TEST_ITEM_THREE = new Item(3, 2, "Test Item Three", TRUE, "Fall", "Evening", "Windy", "Ocean", "Test Item 3 Description", 4);
+        // TEST_ITEM_THREE = new Item(3, "Test Item Three", TRUE, "Fall", "Evening", "Windy", "Ocean", "Test Item 3 Description", 4);
         Item existing = new Item();
-        existing.setItemId(TEST_ITEM_THREE.getItemId());
+        existing.setItemId(3);
         existing.setItemName("Test Item Three");
         existing.setItemCompleted(TRUE);
-        existing.setItemClassification(2);
+//        existing.setItemClassification(2);
         existing.setItemSeason("Fall");
         existing.setItemTime("Evening");
         existing.setItemWeather("Windy");
@@ -116,7 +114,7 @@ public class JdbcItemDaoTest extends BaseDaoTest {
         int rowsAffected = sut.deleteItem(TEST_ITEM_FOUR.getItemId());
         Assert.assertEquals("deleteItem did not return the correct number of rows affected.", 1, rowsAffected);
         Item retrieved = getItemByIdTestVerification(TEST_ITEM_FOUR.getItemId());
-        Assert.assertNotNull("deleteItem did not remove the Item from the database.", retrieved);
+        Assert.assertNull("deleteItem did not remove the Item from the database.", retrieved);
     }
 
 }

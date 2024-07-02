@@ -4,12 +4,10 @@ START TRANSACTION;
 
 -- Drop tables if they exist
 DROP TABLE IF EXISTS item_classification, achievement_item, item, villager, achievement, classification CASCADE;
-DROP SEQUENCE IF EXISTS item_serial, villager_serial, classification_serial;
+DROP SEQUENCE IF EXISTS villager_serial;
 
 -- Create serials
-CREATE SEQUENCE item_serial;
 CREATE SEQUENCE villager_serial;
-CREATE SEQUENCE classification_serial;
 
 -- Create Achievement Table
 CREATE TABLE achievement (
@@ -24,15 +22,14 @@ CREATE TABLE achievement (
 
 -- Create Classification Table
 CREATE TABLE classification (
-	classification_id int NOT NULL DEFAULT nextval('classification_serial'),
+	classification_id int NOT NULL,
 	name varchar NOT NULL,	-- classification name of the item
 	CONSTRAINT pk_classification PRIMARY KEY (classification_id)
 );
 
 -- Create Item Table
 CREATE TABLE item (
-	item_id int NOT NULL DEFAULT nextval('item_serial'),
-	classification_id int NOT NULL,		-- Classification id (FK)
+	item_id int NOT NULL,
 	name varchar NOT NULL,				-- Name of the item
 	season varchar,						-- Season item is found in
 	time varchar,						-- Time (if applicable) item is found during
@@ -40,13 +37,12 @@ CREATE TABLE item (
 	location varchar,					-- Location item is found
 	description text,					-- Description of item
 	completed boolean DEFAULT false,	-- Whether it's completed or not
-	CONSTRAINT pk_item PRIMARY KEY (item_id),
-	CONSTRAINT fk_item_classification FOREIGN KEY (classification_id) REFERENCES classification (classification_id)
+	CONSTRAINT pk_item PRIMARY KEY (item_id)
 );
 
 -- Create Villager Table
 CREATE TABLE villager (
-	villager_id int NOT NULL DEFAULT nextval('villager_serial'),
+	villager_id int NOT NULL,
 	classification_id int DEFAULT 1,	-- Foreign key, references classification (11 is classification villager)
 	name varchar NOT NULL,				-- Villager name
 	marriage_candidate boolean, 		-- Boolean, set true for marriage candidates
@@ -98,31 +94,32 @@ VALUES
 (4, 'Test Achievement Four', 'Test Achievement 4 description', '50');
 
 -- insert values for classification table
-INSERT INTO classification (name)
+INSERT INTO classification (classification_id, name)
 VALUES
-('Test Classification One'),
-('Test Classification Two'),
-('Test Classification Three'),
-('Test Classification Four');
+(0, 'Empty Classification for Deletions'),
+(1, 'Test Classification One'),
+(2, 'Test Classification Two'),
+(3, 'Test Classification Three'),
+(4, 'Test Classification Four');
 
 
 -- insert values for item table
-INSERT INTO item (classification_id, name, season, time, weather, location, description)
+INSERT INTO item (item_id, name, season, time, weather, location, description)
 VALUES
-('4', 'Test Item One', 'Spring', 'Any', 'Rain', 'Forest', 'Test Item 1 Description'),
-('3', 'Test Item Two', 'Summer', 'Morning', 'Sunny', 'Mountain River', 'Test Item 2 Description'),
-('2', 'Test Item Three', 'Fall', 'Evening', 'Windy', 'Ocean', 'Test Item 3 Description'),
-('1', 'Test Item Four', 'Winter', 'Afternoon', 'Snow', 'Mines', 'Test Item 4 Description');
+(1, 'Test Item One', 'Spring', 'Any', 'Rain', 'Forest', 'Test Item 1 Description'),
+(2, 'Test Item Two', 'Summer', 'Morning', 'Sunny', 'Mountain River', 'Test Item 2 Description'),
+(3, 'Test Item Three', 'Fall', 'Evening', 'Windy', 'Ocean', 'Test Item 3 Description'),
+(4, 'Test Item Four', 'Winter', 'Afternoon', 'Snow', 'Mines', 'Test Item 4 Description');
 
 
 -- insert values for villager
-INSERT INTO villager (name, marriage_candidate, birthday, loved1, loved2, loved3, loved4, loved5, loved6, loved7, loved8, loved9, loved10, loved11, loved12, description)
+INSERT INTO villager (villager_id, name, marriage_candidate, birthday, loved1, loved2, loved3, loved4, loved5, loved6, loved7, loved8, loved9, loved10, loved11, loved12, description)
 VALUES
-('Murphy', FALSE, 'Winter 3', 'Hamburger', 'Fetch', 'Treat', 'Ball', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'A good boy!'),
-('Mister Potato', FALSE, 'Spring 1', 'Mice', 'Yarn', 'Fish', 'Sleep', 'The Zoomies', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'A friendly cat!'),
-('Harry', TRUE, 'Summer 31', 'Magic', 'Flying', 'Sirius', 'Quidditch', 'Chocolate Frogs',
+(1, 'Murphy', FALSE, 'Winter 3', 'Hamburger', 'Fetch', 'Treat', 'Ball', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'A good boy!'),
+(2, 'Mister Potato', FALSE, 'Spring 1', 'Mice', 'Yarn', 'Fish', 'Sleep', 'The Zoomies', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'A friendly cat!'),
+(3, 'Harry', TRUE, 'Summer 31', 'Magic', 'Flying', 'Sirius', 'Quidditch', 'Chocolate Frogs',
  	'Family', 'Adventure', 'Lupin', 'Ron', 'Hermione', 'Pumpkin Juice', 'Fluffy', 'The boy who lived'),
-('Sophie', TRUE, 'Adventure', 'Sewing', 'Cooking', 'Calcifer', 'Howl', 'Magic', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'An ordinary girl.');
+(4, 'Sophie', TRUE, 'Adventure', 'Sewing', 'Cooking', 'Calcifer', 'Howl', 'Magic', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'An ordinary girl.');
 
 
 -- Inserts for achievement_item table
