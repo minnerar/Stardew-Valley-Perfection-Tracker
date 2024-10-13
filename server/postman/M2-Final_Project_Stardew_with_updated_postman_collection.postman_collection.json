@@ -1,0 +1,624 @@
+{
+	"info": {
+		"_postman_id": "b69e5df7-416d-42f3-9ff5-64cb11626181",
+		"name": "M2-Final_Project_Stardew",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36784301"
+	},
+	"item": [
+		{
+			"name": "Login: User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"token\", jsonData.token);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"strictSSL": false
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"user\",\r\n    \"password\": \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login: Admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"token\", jsonData.token);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register user",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"admin2\",\r\n    \"password\": \"admin\",\r\n    \"confirmPassword\": \"admin\",\r\n    \"role\": \"ROLE_ADMIN\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/register",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Achievements",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/achievements",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"achievements"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Achievement by ID",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/achievements/4",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"achievements",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Achievement",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"achievementId\": 99,\r\n        \"achievementCurrent\": \"NaN\",\r\n        \"achievementTotalNeeded\": 0,\r\n        \"achievementProgress\": 0,\r\n        \"achievementDescription\": \"Achievement to add for POSTMAN\",\r\n        \"achievementName\": \"Added Achievement for Postman\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/achievements",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"achievements"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Achievement",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n        \"achievementId\": 99,\r\n        \"achievementName\": \"Empty Achievement\",\r\n        \"achievementDescription\": \"Empty Achievement to catch deleted Achievements! UPDATED FOR POSTMAN\",\r\n        \"achievementProgress\": 0,\r\n        \"achievementTotalNeeded\": 0,\r\n        \"achievementCurrent\": \"NaN\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/achievements/99",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"achievements",
+						"99"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Achievement",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/achievements/99",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"achievements",
+						"99"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Villagers",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/villagers",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"villagers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Villager by ID",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/villagers/4",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"villagers",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Villager",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"villagerDescription\": \"Alex loves sports and hanging out at the beach. He is quite arrogant and brags to everyone that he is going to be a professional athlete. Is his cockiness just a facade to mask his crushing self-doubt? Is he using his sports dream to fill the void left by the disappearance of his parents? Or is he just a brazen youth trying to \\\"look cool\\\"?\",\r\n        \"villagerLovedGifts\": [\r\n            \"Complete Breakfast\",\r\n            \"Jack Be Nimble, Jack Be Thick\",\r\n            \"Salmon Dinner\",\r\n            null,\r\n            null,\r\n            null,\r\n            null,\r\n            null,\r\n            null,\r\n            null,\r\n            null,\r\n            null,\r\n            null,\r\n            null,\r\n            null,\r\n            null,\r\n            null,\r\n            null,\r\n            null,\r\n            null,\r\n            null,\r\n            null,\r\n            null,\r\n            null\r\n        ],\r\n        \"villagerBirthday\": \"Summer 13\",\r\n        \"villagerMarriageCandidate\": true,\r\n        \"villagerName\": \"Alex\",\r\n        \"villagerId\": 1,\r\n        \"villagerHeartCounter\": 0\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/villagers/1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"villagers",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Items",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/items?season=&classification=mineral",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"items"
+					],
+					"query": [
+						{
+							"key": "season",
+							"value": ""
+						},
+						{
+							"key": "classification",
+							"value": "mineral"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Item by ID",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/items/10",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"items",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Classifications",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/classifications",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"classifications"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a Classification",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"classificationId\": 99,\r\n        \"classificationName\": \"Empty for Postman testing\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/classifications",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"classifications"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update a Classification",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"classificationId\": 99,\r\n        \"classificationName\": \"Empty for Postman testing UPDATED\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/classifications/99",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"classifications",
+						"99"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a Classification",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/classifications/99",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"classifications",
+						"99"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "default"
+		},
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY1NzY0MzI3NH0.DVYTDK3fsn80scCDYSCxdN4itbTObMVVzlpJmNZd1pC-Uh1fjLwUPN-du-OjeUTFBtDWvEuPiVjXXd1L_Dzh-A",
+			"type": "default"
+		}
+	]
+}
