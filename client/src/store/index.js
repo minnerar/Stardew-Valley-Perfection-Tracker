@@ -6,6 +6,10 @@ export function createStore(currentToken, currentUser) {
     state: {
       token: currentToken || '',
       user: currentUser || {},
+      achievements: [],
+      items: [],
+      villagers: [],
+      classifications: [],
     },
     mutations: {
       SET_AUTH_TOKEN(state, token) {
@@ -23,6 +27,18 @@ export function createStore(currentToken, currentUser) {
         state.token = '';
         state.user = {};
         axios.defaults.headers.common = {};
+      },
+      SET_ACHIEVEMENTS(state, achievements) {
+        state.achievements = achievements;
+      },
+      SET_ITEMS(state, items) {
+        state.items = items;
+      },
+      SET_VILLAGERS(state, villagers) {
+        state.villagers = villagers;
+      },
+      SET_CLASSIFICATIONS(state, classifications) {
+        state.classifications = classifications;
       }
     },
 

@@ -2,10 +2,13 @@ import { createRouter as createRouter, createWebHistory } from 'vue-router'
 import { useStore } from 'vuex'
 
 // Import components
-import HomeView from '../views/HomeView.vue'
+import StardewHomeView from '../views/StardewHomeView.vue'
 import LoginView from '../views/LoginView.vue'
 import LogoutView from '../views/LogoutView.vue'
 import RegisterView from '../views/RegisterView.vue'
+import AchievementView from '../views/AchievementView.vue'
+import ItemDetailView from '../views/ItemDetailView.vue'
+import VillagerView from '../views/VillagerView.vue'
 
 
 /**
@@ -20,9 +23,33 @@ const routes = [
     {
       path: '/',
       name: 'home',
-      component: HomeView,
+      component: StardewHomeView,
       meta: {
-        requiresAuth: true
+        requiresAuth: false
+      }
+    },
+    {
+      path: '/',
+      name: 'achievements',
+      component: AchievementView,
+      meta: {
+        requiresAuth: false
+      }
+    },
+    {
+      path: '/',
+      name: 'item',
+      component: ItemDetailView,
+      meta: {
+        requiresAuth: false
+      }
+    },
+    {
+      path: '/',
+      name: 'villager',
+      component: VillagerView,
+      meta: {
+        requiresAuth: false
       }
     },
     {
