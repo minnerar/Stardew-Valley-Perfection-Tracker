@@ -16,7 +16,16 @@
 
 <script>
 export default {
+  methods: {
 
+  },
+  computed: {
+    achievement() {
+      return this.$store.state.achievement.find( achievement => {
+        return achievement.achievementId == this.$route.params.achievementId;
+      });
+    }
+  }
 }
 </script>
 

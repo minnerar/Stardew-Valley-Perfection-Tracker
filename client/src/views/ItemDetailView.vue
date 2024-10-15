@@ -32,6 +32,11 @@ export default {
         return item.id = id;
       });
       this.$router.push('/item');
+    },
+    item() {
+      return this.$store.state.item.find( item => {
+        return item.itemId == this.$route.params.itemId;
+      });
     }
   }
 

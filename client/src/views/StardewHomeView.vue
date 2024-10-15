@@ -40,17 +40,20 @@ export default {
           }
         ),
     ]);
+    resourceService.getItems().then( (response) => {this.$store.commit("SET_ITEMS"), response.data});
+    resourceService.getVillagers().then( (response) => {this.$store.commit("SET_VILLAGERS"), response.data});
+    resourceService.getClassifications().then( (response) => {this.$store.commit("SET_CLASSIFICATIONS"), response.data});
   },
   methods: {
-    getItems() {
-        resourceService.getItems().then( (response) => {this.$store.commit("SET_ITEMS"), response.data});
-    },
-    getVillagers() {
-        resourceService.getVillagers().then( (response) => {this.$store.commit("SET_VILLAGERS"), response.data});
-    },
-    getClassifications() {
-        resourceService.getClassifications().then( (response) => {this.$store.commit("SET_CLASSIFICATIONS"), response.data});
-    }
+    // getItems() {
+    //     resourceService.getItems().then( (response) => {this.$store.commit("SET_ITEMS"), response.data});
+    // },
+    // getVillagers() {
+    //     resourceService.getVillagers().then( (response) => {this.$store.commit("SET_VILLAGERS"), response.data});
+    // },
+    // getClassifications() {
+    //     resourceService.getClassifications().then( (response) => {this.$store.commit("SET_CLASSIFICATIONS"), response.data});
+    // }
   }
 };
 </script>
