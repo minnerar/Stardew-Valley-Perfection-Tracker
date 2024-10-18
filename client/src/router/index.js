@@ -29,7 +29,7 @@ const routes = [
       }
     },
     {
-      path: '/achievement',
+      path: '/achievement/:achievementId',
       name: 'achievement',
       component: AchievementView,
       meta: {
@@ -37,7 +37,7 @@ const routes = [
       }
     },
     {
-      path: '/item',
+      path: '/item/:itemId',
       name: 'item',
       component: ItemDetailView,
       meta: {
@@ -45,7 +45,7 @@ const routes = [
       }
     },
     {
-      path: '/villager',
+      path: '/villager/:villagerId',
       name: 'villager',
       component: VillagerView,
       meta: {

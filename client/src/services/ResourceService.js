@@ -1,9 +1,5 @@
 import axios from 'axios';
 
-// const http = axios.create({
-//     baseURL: 'http://localhost:9000'
-// });
-
 const resourceService = {
     getAchievements() {
         return axios.get('/achievements');

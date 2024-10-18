@@ -1,18 +1,18 @@
 <template>
-  <section id="items">
-    <h2>ITEMS</h2>
-    <ul id="item-list">
-      <li v-for="item in items"
-        v-bind:key="item.itemId"
-        @click="itemView(item.itemId)">
-        <div class="item-list-item">
-          <div>{{ item.itemName }}</div>
-          <!-- <img :src="item.imageURL" /> -->
+  <div class="villagers">
+    <h2>VILLAGERS</h2>
+    <ul id="villager-list">
+      <li v-for="villager in villagers"
+        v-bind:key="villager.villagerId"
+        @click="villagerView(villager.villagerId)">
+        <div class="villager-list-item">
+          <div>{{ villager.villagerName }}</div>
+          <!-- <img :src="villager.imageURL" /> -->
           <span class="icon-container" v-if="isAdmin">
             <router-link
               v-bind:to="{
-                name: 'item',
-                params: { itemId: item.itemId },
+                name: 'villager',
+                params: { villagerId: villager.villagerId },
               }"
             >
               ADD
@@ -21,14 +21,14 @@
         </div>
       </li>
     </ul>
-  </section>
+  </div>
 </template>
 
 <script>
 export default {
   computed: {
-    items() {
-      return this.$store.state.items;
+    villagers() {
+      return this.$store.state.villagers;
     },
     isAdmin() {
       return (
@@ -39,17 +39,16 @@ export default {
     },
   },
   methods: {
-    itemView(id) {
-      // push to the individual item page view
-      this.$router.push({name: "item", params: {itemId: id}});
-    },
-  },
+    villagerView(id) {
+        this.$router.push({name: "villager", params: {villagerId: id}});
+    }
+  }
 };
 </script>
 
 <style scoped>
 
-#items {
+.villagers {
   background-color: #ffffff; 
   padding: 20px;
   border-radius: 8px; 
@@ -59,38 +58,38 @@ export default {
 }
 
 h2 {
-  text-align: center;
+  text-align: center; 
   color: #2e8b57; 
   margin-bottom: 20px;
 }
 
-#item-list {
-  list-style-type: none;
+#villager-list {
+  list-style-type: none; 
   padding: 0;
   overflow-y: auto; 
   flex: 1; 
 }
 
-#item-list li {
+#villager-list li {
   cursor: pointer; 
   padding: 10px;
   margin: 10px 0;
   border-radius: 4px; 
   transition: background-color 0.3s ease; 
-  background-color: #fafafa; 
+  background-color: #fafafa;
 }
 
-#item-list li:hover {
+#villager-list li:hover {
   background-color: #e0f7fa; 
 }
 
-.item-list-item {
+.villager-list-item {
   display: flex;
   justify-content: space-between; 
   align-items: center;
 }
 
-.item-name {
+.villager-name {
   font-size: 1.2rem; 
   color: #333; 
 }
@@ -103,15 +102,14 @@ h2 {
   text-decoration: none; 
   color: #2e8b57; 
   font-weight: bold; 
-  background-color: #e0f7fa; 
+  background-color: #e0f7fa;
   padding: 5px 10px; 
-  border-radius: 4px; 
+  border-radius: 4px;
   transition: background-color 0.3s ease; 
 }
 
 .icon-container router-link:hover {
   background-color: #b2ebf2; 
 }
-
 
 </style>
