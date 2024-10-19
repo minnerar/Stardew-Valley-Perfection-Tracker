@@ -91,8 +91,8 @@ export default {
     },
     updateVillagerHeartCounter(villager, count) {
       // update the villager heart counter 
-      this.$store.commit("UPDATE_VILLAGER_HEART_COUNTER", { villager: this.selectedVillager, count: this.count});
       this.selectedVillager.villagerHeartCounter = this.count;
+      this.$store.commit("UPDATE_VILLAGER_HEART_COUNTER", { villager: this.selectedVillager, count: this.count});
 
       // save the updated counter value back to the database
       resourceService.updateVillagerById(this.selectedVillager);

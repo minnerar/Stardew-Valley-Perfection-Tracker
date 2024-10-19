@@ -76,6 +76,7 @@ CREATE TABLE villager (
 	loved11 varchar,				-- Loved gift of villager
 	loved12 varchar,				-- Loved gift of villager
 	description text NOT NULL,		-- Villager description from Stardew Valley Wiki
+	heartCounter int DEFAULT 0,      -- The current amount of hearts with a villager
 	imageURL varchar,               -- png for the image
 	CONSTRAINT pk_villager PRIMARY KEY (villager_id),
 	CONSTRAINT fk_classification_villager FOREIGN KEY (classification_id) REFERENCES classification (classification_id)
