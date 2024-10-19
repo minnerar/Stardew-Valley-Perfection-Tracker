@@ -207,6 +207,7 @@ export default {
       return (
         // check if the user is an admin
         this.$store.state.user &&
+        this.$store.state.user.role &&
         this.$store.state.user.role.includes("ROLE_ADMIN")
       );
     },
