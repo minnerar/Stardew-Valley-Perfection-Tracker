@@ -68,7 +68,6 @@ nav {
   font-weight: bold; 
 }
 
-
 main {
   flex: 1; 
   display: flex;

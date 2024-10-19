@@ -2,22 +2,14 @@
   <section id="items">
     <h2>ITEMS</h2>
     <ul id="item-list">
-      <li v-for="item in items"
+      <li
+        v-for="item in items"
         v-bind:key="item.itemId"
-        @click="itemView(item.itemId)">
+        @click="itemView(item.itemId)"
+      >
         <div class="item-list-item">
           <div>{{ item.itemName }}</div>
           <!-- <img :src="item.imageURL" /> -->
-          <span class="icon-container" v-if="isAdmin">
-            <router-link
-              v-bind:to="{
-                name: 'item',
-                params: { itemId: item.itemId },
-              }"
-            >
-              ADD
-            </router-link>
-          </span>
         </div>
       </li>
     </ul>
@@ -43,56 +35,61 @@ export default {
       // push to the individual item page view
       this.$router.push({name: "item", params: {itemId: id}});
     },
-  },
-};
+    // isAdmin() {
+    //   return (
+    //     this.$store.state.user &&
+    //     this.$store.state.user.role.includes("ROLE_ADMIN")
+    //   );  
+    // },
+  }
+}
 </script>
 
 <style scoped>
-
 #items {
-  background-color: #ffffff; 
+  background-color: #ffffff;
   padding: 20px;
-  border-radius: 8px; 
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
 }
 
 h2 {
   text-align: center;
-  color: #2e8b57; 
+  color: #2e8b57;
   margin-bottom: 20px;
 }
 
 #item-list {
   list-style-type: none;
   padding: 0;
-  overflow-y: auto; 
-  flex: 1; 
+  overflow-y: auto;
+  flex: 1;
 }
 
 #item-list li {
-  cursor: pointer; 
+  cursor: pointer;
   padding: 10px;
   margin: 10px 0;
-  border-radius: 4px; 
-  transition: background-color 0.3s ease; 
-  background-color: #fafafa; 
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  background-color: #fafafa;
 }
 
 #item-list li:hover {
-  background-color: #e0f7fa; 
+  background-color: #e0f7fa;
 }
 
 .item-list-item {
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
   align-items: center;
 }
 
 .item-name {
-  font-size: 1.2rem; 
-  color: #333; 
+  font-size: 1.2rem;
+  color: #333;
 }
 
 .icon-container {
@@ -100,18 +97,16 @@ h2 {
 }
 
 .icon-container router-link {
-  text-decoration: none; 
-  color: #2e8b57; 
-  font-weight: bold; 
-  background-color: #e0f7fa; 
-  padding: 5px 10px; 
-  border-radius: 4px; 
-  transition: background-color 0.3s ease; 
+  text-decoration: none;
+  color: #2e8b57;
+  font-weight: bold;
+  background-color: #e0f7fa;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
 }
 
 .icon-container router-link:hover {
-  background-color: #b2ebf2; 
+  background-color: #b2ebf2;
 }
-
-
 </style>

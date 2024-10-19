@@ -31,11 +31,26 @@ export function createStore(currentToken, currentUser) {
       SET_ACHIEVEMENTS(state, achievements) {
         state.achievements = achievements;
       },
+      UPDATE_ACHIEVEMENT(state, achievement) {
+        state.achievement = achievement;
+      },
+      UPDATE_ACHIEVEMENT_COMPLETION(state, payload) {
+        payload.achievement.achievementCurrent == payload.toggleStatus;
+      },
+      UPDATE_ACHIEVEMENT_PROGRESS(state, payload) {
+        payload.achievement.achievementProgress == payload.count;
+      },
       SET_ITEMS(state, items) {
         state.items = items;
       },
+      UPDATE_ITEM_COMPLETION(state, payload) {
+        payload.item.itemCompleted == payload.status;
+      },
       SET_VILLAGERS(state, villagers) {
         state.villagers = villagers;
+      },
+      UPDATE_VILLAGER_HEART_COUNTER(state, payload) {
+        payload.villager.villagerHeartCounter == payload.villagerHeartCounter;
       },
       SET_CLASSIFICATIONS(state, classifications) {
         state.classifications = classifications;

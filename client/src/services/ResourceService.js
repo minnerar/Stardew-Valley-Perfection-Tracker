@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const resourceService = {
+    // methods for Achievements 
     getAchievements() {
         return axios.get('/achievements');
     },
@@ -16,6 +17,8 @@ const resourceService = {
     deleteAchievementById(id) {
         return axios.delete(`/achievements/${id}`);
     },
+
+    // methods for Items
     getItems() {
         return axios.get('/items');
     },
@@ -26,11 +29,13 @@ const resourceService = {
         return axios.post('/items', item);
     },
     updateItemById(item) {
-        return axios.put(`/items/${item.id}`, item);
+        return axios.put(`/items/${item.itemId}`, item);
     },
     deleteItemById(id) {
         return axios.delete(`/items/${id}`);
     },
+
+    // methods for Villagers 
     getVillagers() {
         return axios.get('/villagers');
     },
@@ -40,6 +45,11 @@ const resourceService = {
     updateVillagerById(villager) {
         return axios.put(`/villagers/${villager.id}`, villager);
     },
+    deleteVillagerById(villager) {
+        return axios.delete(`/villagers/${villager.id}`);
+    },
+
+    // methods for Classifications  
     getClassifications() {
         return axios.get('/classifications');
     },

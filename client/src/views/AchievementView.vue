@@ -2,83 +2,227 @@
   <div class="achievement-detail">
     <div class="achievement-info">
       <img :src="achievement.imageURL" />
-      <h2 class="achievement-name">{{ achievement.achievementName }}</h2>
+      <h2 class="achievement-name">
+        <template v-if="isEditing">
+          <input
+            v-model="achievementObject.achievementName"
+            placeholder="Achievement Name"
+          />
+        </template>
+        <template v-else>
+          {{ achievement.achievementName }}
+        </template>
+      </h2>
+
       <p>
         {{
           achievement.achievementProgress == 100 ? "Completed" : "Incomplete"
         }}
       </p>
-      <button @click="toggleAchievementStatus">
+      <button v-if="isAdmin" @click="toggleAchievementStatus">
         Mark as {{ toggleStatus ? "Incomplete" : "Complete" }}
       </button>
-      <p>{{ achievement.achievementDescription }}</p>
+
       <p>
-        <strong>Total Needed:</strong> {{ achievement.achievementTotalNeeded }}
+        <template v-if="isEditing">
+          <textarea
+            v-model="achievementObject.achievementDescription"
+            placeholder="Achievement Description"
+          ></textarea>
+        </template>
+        <template v-else>
+          {{ achievement.achievementDescription }}
+        </template>
       </p>
-      <!-- <p><strong>Current:</strong> {{ achievement.achievementCurrent }}</p> -->
-      <p><strong>Progress:</strong> {{ achievement.achievementProgress }}</p>
+
       <p>
-        <strong>Update Progress:</strong>
-        <button @click="decrement" :disabled="count === 0">-</button>
-        <span>{{ achievement.achievementProgress }}</span>
-        <button @click="increment" :disabled="count === achievement.achievementTotalNeeded">+</button>
+        <strong>Total Needed: </strong>
+        <template v-if="isEditing">
+          <input
+            type="number"
+            v-model="achievementObject.achievementTotalNeeded"
+            placeholder="Total Needed"
+          />
+        </template>
+        <template v-else>
+          {{ achievement.achievementTotalNeeded }}
+        </template>
       </p>
-      <!-- need to add an input box here to set progress -->
+
+      <p>
+        <strong>Progress: </strong>
+        <template v-if="isEditing">
+          <input
+            type="number"
+            v-model="achievementObject.achievementProgress"
+            placeholder="Progress"
+          />
+        </template>
+        <template v-else>
+          {{ achievement.achievementProgress }}
+        </template>
+      </p>
+
+      <p>
+        <strong v-if="isAdmin">Update Progress:</strong>
+        <button v-if="isAdmin" @click="decrement" :disabled="count === 0">
+          -
+        </button>
+        <span v-if="isAdmin">{{ achievement.achievementProgress }}</span>
+        <button
+          v-if="isAdmin"
+          @click="increment"
+          :disabled="count === achievement.achievementTotalNeeded"
+        >
+          +
+        </button>
+      </p>
+
+      <div class="button-container" v-if="isAdmin">
+        <div>
+          <button @click="toggleEditing">
+            {{ isEditing ? "SAVE" : "EDIT" }}
+          </button>
+        </div>
+        <div>
+          <button v-if="isAdmin" @click="deleteAchievement(achievement)">
+            DELETE
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
+
 <script>
+import { resourceService } from "../services/ResourceService";
 export default {
   data() {
     return {
       toggleStatus: false,
-      count: 0
+      count: 0,
+      isEditing: false,
+      achievementObject: {
+        achievementName: "",
+        achievementProgress: 0,
+        achievementDescription: "",
+        achievementTotalNeeded: 0,
+        achievementCurrent: 0,
+      },
     };
   },
   methods: {
     toggleAchievementStatus() {
+      // toggle the achievement status between complete and incomplete
       this.toggleStatus = !this.toggleStatus;
-      if (this.toggleStatus) {
-        this.achievement.achievementProgress = 100;
-        this.achievement.achievementCurrent =
-          this.achievement.achievementTotalNeeded;
+      // if (this.toggleStatus) {
+      //   this.achievement.achievementProgress = 100;
+      //   this.achievement.achievementCurrent =
+      //     this.achievement.achievementTotalNeeded;
+      // } else {
+      //   this.achievement.achievementProgress = 0;
+      //   this.achievement.achievementCurrent = 0;
+      // }
+
+      // update the database with the new status
+      this.$store.commit("UPDATE_ACHIEVEMENT_COMPLETION", {
+        achievement: this.achievement,
+        achievementTotalNeeded: this.achievementTotalNeeded,
+      });
+      this.achievement.achievementProgress = this.achievementTotalNeeded;
+      this.updateAchievement(this.achievement);
+    },
+    toggleEditing() {
+      // toggle the editing status
+      this.isEditing = !this.isEditing;
+
+      if (this.isEditing) {
+        // If entering edit mode, copy the current achievement's values to itemObject
+        this.achievementObject = {
+          achievementName: this.achievement.achievementName,
+          achievementProgress: this.achievement.achievementProgress,
+          achievementDescription: this.achievement.achievementDescription,
+          achievementTotalNeeded: this.achievement.achievementTotalNeeded,
+          achievementCurrent: this.achievement.achievementCurrent,
+        };
       } else {
-        this.achievement.achievementProgress = 0;
-        this.achievement.achievementCurrent = 0;
+        // If exiting edit mode, update the current achievement with the values from itemObject
+        this.achievement.achievementName =
+          this.achievementObject.achievementName;
+        this.achievement.achievementProgress =
+          this.achievementObject.achievementProgress;
+        this.achievement.achievementDescription =
+          this.achievementObject.achievementDescription;
+        this.achievement.achievementTotalNeeded =
+          this.achievementObject.achievementTotalNeeded;
+        this.achievement.achievementCurrent =
+          this.achievementObject.achievementCurrent;
+
+        // Save the updated achievement back to the store or API
+        this.updateAchievement(this.achievement);
       }
     },
-    getImageUrl(name) {
-      return new URL(name, import.meta.url).href;
+    updateAchievement(achievement) {
+      // update the achievement
+      resourceService.updateAchievementById(achievement);
+    },
+    deleteAchievement(achievement) {
+      // delete the achievement
+      resourceService.deleteAchievementById(achievement.achievementId);
     },
     setProgress(input) {
+      // set the achievement progress
       this.achievement.achievementProgress == input;
     },
     increment() {
       if (this.count < this.achievement.achievementTotalNeeded) {
+        // increment the counter
         this.count++;
-        this.achievement.achievementProgress++;
+
+        // update in the database
+        this.$store.commit("UPDATE_ACHIEVEMENT_PROGRESS", {
+          achievement: this.achievement,
+          count: this.count
+        });
+        this.achievement.achievementProgress = this.count;
+        this.updateAchievement(this.achievement);
       }
     },
     decrement() {
       if (this.count > 0) {
+        // decrement the counter
         this.count--;
-        this.achievement.achievementProgress--;
+
+        // update in the database 
+        this.$store.commit("UPDATE_ACHIEVEMENT_PROGRESS", {
+          achievement: this.achievement,
+          count: this.count
+        });
+        this.achievement.achievementProgress = this.count;
+        this.updateAchievement(this.achievement);
       }
-    }
+    },
   },
   computed: {
     achievement() {
+      // get the achievement to display
       return this.$store.state.achievements.find((achievement) => {
         return achievement.achievementId == this.$route.params.achievementId;
       });
+    },
+    isAdmin() {
+      return (
+        // check if the user is an admin
+        this.$store.state.user &&
+        this.$store.state.user.role.includes("ROLE_ADMIN")
+      );
     },
   },
 };
 </script>
 
 <style>
-
 .achievement-detail {
   max-width: 600px;
   margin: 20px auto;
@@ -86,7 +230,7 @@ export default {
   background-color: #f9f9f9;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
 }
 
 .achievement-info {
@@ -98,7 +242,7 @@ export default {
   height: auto; /* Maintain aspect ratio */
   border-radius: 8px;
   margin-bottom: 15px;
-  display: block; 
+  display: block;
   margin-left: auto;
   margin-right: auto;
 }
@@ -144,5 +288,4 @@ span {
   font-weight: bold;
   margin: 0 10px;
 }
-
 </style>

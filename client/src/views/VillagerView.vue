@@ -6,43 +6,118 @@
       <p>{{ selectedVillager.villagerDescription }}</p>
       <p>
         <strong>Current Hearts:</strong>
-        <button @click="decrement" :disabled="count === 0">-</button>
+        <button v-if="isAdmin" @click="decrement" :disabled="count === 0">-</button>
         <span>{{ count }}</span>
-        <button @click="increment" :disabled="count === 8">+</button>
+        <button v-if="isAdmin" @click="increment" :disabled="count === 8">+</button>
       </p>
       <p>
         <strong>Marriage Candidate:</strong>
-        {{ selectedVillager.villagerMarriageCandidate }}
+        <span v-if="!isEditing">{{ selectedVillager.villagerMarriageCandidate }}</span>
+        <input v-if="isEditing" v-model="updatedMarriageCandidate" />
       </p>
-      <p><strong>Birthday:</strong> {{ selectedVillager.villagerBirthday }}</p>
-      <p><strong>Loved Gifts:</strong> {{ removeNull(selectedVillager.villagerLovedGifts) }}
+      <p><strong>Birthday:</strong> 
+        <span v-if="!isEditing">{{ selectedVillager.villagerBirthday }}</span>
+        <input v-if="isEditing" v-model="updatedBirthday" />
+      </p>
+      <p><strong>Loved Gifts:</strong>
+        <span v-if="!isEditing">{{ removeNull(selectedVillager.villagerLovedGifts) }}</span>
+        <input v-if="isEditing" v-model="updatedLovedGifts" />
       </p>
     </div>
+    <div>
+      <button v-if="isAdmin" @click="toggleEdit">{{ isEditing ? 'SAVE' : 'UPDATE' }}</button>
+    </div>
+    <div><button v-if="isAdmin" @click="deleteVillager(this.selectedVillager)">DELETE</button></div>
   </div>
 </template>
 
 <script>
+import { resourceService } from '../services/ResourceService';
+
 export default {
   data() {
     return {
-      count: 0
+      count: 0,
+      isEditing: false,
+      villagerObject: {
+        villagerName: "",
+        villagerMarriageCandidate: false,
+        villagerBirthday: "",
+        villagerDescription: "",
+        villagerHeartCounter: 0,
+        villagerLovedGifts: []
+      }
     }
   },
   props: {
     villager: Object,
   },
   methods: {
+    toggleEdit() {
+      // toggle the isEditing variable
+      this.isEditing = !this.isEditing;
+
+      // update the information from the input values
+      if (this.isEditing) {
+        this.villagerObject = {
+          villagerName: this.villager.villagerName,
+          villagerMarriageCandidate: this.villager.villagerMarriageCandidate,
+          villagerBirthday: this.villager.villagerBirthday,
+          villagerDescription: this.villager.villagerDescription,
+          villagerHeartCounter: this.villager.villagerHeartCounter,
+          villagerLovedGifts: this.villager.villagerLovedGifts
+        };
+      } else {
+        this.villagerObject.villagerName = this.selectedVillager.villagerMarriageCandidate;
+        this.villagerObject.villagerMarriageCandidate = this.selectedVillager.villagerMarriageCandidate;
+        this.villagerObject.villagerBirthday = this.selectedVillager.villagerBirthday;
+        this.villagerObject.villagerDescription = this.selectedVillager.villagerDescription
+        this.villagerObject.villagerHeartCounter = this.selectedVillager.villagerHeartCounter
+        this.villagerObject.villagerLovedGifts = this.selectedVillager.villagerLovedGifts.join(', ');
+      }
+
+      // save the update villager to the database
+      this.updateVillager(this.selectedVillager);
+      
+    },
+    updateVillager(villager) {
+      // update the villager
+      resourceService.updateVillagerById(villager);
+
+    },
+    deleteVillager(villager) {
+      // delete the villager
+      resourceService.deleteVillagerById(villager.id);
+    },
+    updateVillagerHeartCounter(villager, count) {
+      // update the villager heart counter 
+      this.$store.commit("UPDATE_VILLAGER_HEART_COUNTER", { villager: this.selectedVillager, count: this.count});
+      this.selectedVillager.villagerHeartCounter = this.count;
+
+      // save the updated counter value back to the database
+      resourceService.updateVillagerById(this.selectedVillager);
+
+    },
     increment() {
       if (this.count < 10) {
+        // increment the counter
         this.count++;
+
+        // save the updated counter value back to the database
+        this.updateVillagerHeartCounter(this.selectedVillager, this.count);
       }
     },
     decrement() {
       if (this.count > 0) {
+        // decrement the counter
         this.count--;
+
+        // save the updated counter value back to the database
+        this.updateVillagerHeartCounter(this.selectedVillager, this.count);
       }
     },
     removeNull(giftArray) {
+      // filter through their loved gifts array and only return the non-null items 
       return giftArray.filter( gift => {
         return gift != null;
       });
@@ -50,10 +125,17 @@ export default {
   },
   computed: {
     selectedVillager() {
+      // get the villager with the villager id passed from the click from the villagerList
       return this.$store.state.villagers.find( villager => {
         return villager.villagerId == this.$route.params.villagerId;
       });
-    }
+    },
+    isAdmin() {
+      return (
+        this.$store.state.user &&
+        this.$store.state.user.role.includes("ROLE_ADMIN")
+      );
+    },
   }
 };
 </script>

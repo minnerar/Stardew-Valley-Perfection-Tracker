@@ -9,6 +9,7 @@ import RegisterView from '../views/RegisterView.vue'
 import AchievementView from '../views/AchievementView.vue'
 import ItemDetailView from '../views/ItemDetailView.vue'
 import VillagerView from '../views/VillagerView.vue'
+import AchievementEditView from '../views/AchievementEditView.vue'
 
 
 /**
@@ -52,6 +53,14 @@ const routes = [
         requiresAuth: false
       }
     },
+    // {
+    //   path: '/achievement/:achievementId',
+    //   name: 'editAchievement',
+    //   component: AchievementEditView,
+    //   meta: {
+    //     requiresAuth: false
+    //   }
+    // },
     {
       path: "/login",
       name: "login",
