@@ -54,6 +54,7 @@ export default {
   },
   methods: {
     currentTotalProgress() {
+      // calculates the current progress towards perfection (only including achievements)
       let currentCompleted = this.$store.state.achievements.find(
         (achievement) => {
           return achievement.achievementProgress == 100;

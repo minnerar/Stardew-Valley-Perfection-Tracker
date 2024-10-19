@@ -116,14 +116,6 @@ export default {
     toggleAchievementStatus() {
       // toggle the achievement status between complete and incomplete
       this.toggleStatus = !this.toggleStatus;
-      // if (this.toggleStatus) {
-      //   this.achievement.achievementProgress = 100;
-      //   this.achievement.achievementCurrent =
-      //     this.achievement.achievementTotalNeeded;
-      // } else {
-      //   this.achievement.achievementProgress = 0;
-      //   this.achievement.achievementCurrent = 0;
-      // }
 
       // update the database with the new status
       this.$store.commit("UPDATE_ACHIEVEMENT_COMPLETION", {
@@ -138,7 +130,7 @@ export default {
       this.isEditing = !this.isEditing;
 
       if (this.isEditing) {
-        // If entering edit mode, copy the current achievement's values to itemObject
+        // If entering edit mode, copy the current achievement's values to achievementObject
         this.achievementObject = {
           achievementName: this.achievement.achievementName,
           achievementProgress: this.achievement.achievementProgress,
@@ -147,7 +139,7 @@ export default {
           achievementCurrent: this.achievement.achievementCurrent,
         };
       } else {
-        // If exiting edit mode, update the current achievement with the values from itemObject
+        // If exiting edit mode, update the current achievement with the values from achievementObject
         this.achievement.achievementName =
           this.achievementObject.achievementName;
         this.achievement.achievementProgress =

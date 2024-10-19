@@ -132,6 +132,7 @@ export default {
     },
     isAdmin() {
       return (
+        //checks if the user is an admin
         this.$store.state.user &&
         this.$store.state.user.role.includes("ROLE_ADMIN")
       );
