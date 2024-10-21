@@ -9,8 +9,8 @@
       >
         <div class="achievement-list-item">
           <div>{{ achievement.achievementName }}</div>
-          <!-- <img :src="achievement.imageURL" /> -->
-          <span class="icon-container" v-if="isAdmin">
+          <img id="achievement-image" :src="achievement.imageURL" />
+          <!-- <span class="icon-container" v-if="isAdmin">
             <router-link
               v-bind:to="{
                 name: 'editAchievement',
@@ -18,7 +18,7 @@
               }"
               >ADD</router-link
             >
-          </span>
+          </span> -->
         </div>
       </li>
     </ul>
@@ -70,6 +70,10 @@ h2 {
   text-align: center;
   color: #2e8b57;
   margin-bottom: 20px;
+}
+
+#achievement-image {
+  max-height: 60px;
 }
 
 #achievement-list {

@@ -7,8 +7,8 @@
         @click="villagerView(villager.villagerId)">
         <div class="villager-list-item">
           <div>{{ villager.villagerName }}</div>
-          <!-- <img :src="villager.imageURL" /> -->
-          <span class="icon-container" v-if="isAdmin">
+          <img id="villager-image" :src="villager.imageURL" />
+          <!-- <span class="icon-container" v-if="isAdmin">
             <router-link
               v-bind:to="{
                 name: 'villager',
@@ -17,7 +17,7 @@
             >
               ADD
             </router-link>
-          </span>
+          </span> -->
         </div>
       </li>
     </ul>
@@ -77,6 +77,10 @@ h2 {
   border-radius: 4px; 
   transition: background-color 0.3s ease; 
   background-color: #fafafa;
+}
+
+#villager-image {
+  max-width: 60px;
 }
 
 #villager-list li:hover {

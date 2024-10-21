@@ -71,6 +71,7 @@ nav {
 #app-title {
   font-size: 2rem; 
   font-weight: bold; 
+  color: rgb(46, 45, 45);
 }
 
 main {

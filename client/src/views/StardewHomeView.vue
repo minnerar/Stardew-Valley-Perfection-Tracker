@@ -3,7 +3,7 @@
   {{this.score}}
   </div> -->
   <!-- <div> -->
-    <!-- {{ currentCompletedAchievements / totalAchievements }} -->
+  <!-- {{ currentCompletedAchievements / totalAchievements }} -->
   <!-- </div> -->
   <div id="main-div">
     <div id="achievement-container">
@@ -60,9 +60,11 @@ export default {
       }
     );
     this.totalAchievements = this.$store.state.achievements.length;
-    this.currentCompletedAchievements = this.$store.state.achievements.find( achievement => {
-        return achievement.achievementCurrent = 1;
-      });
+    this.currentCompletedAchievements = this.$store.state.achievements.find(
+      (achievement) => {
+        return (achievement.achievementCurrent = 1);
+      }
+    );
   },
   methods: {
     currentTotalProgress() {
@@ -89,15 +91,15 @@ html {
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden; 
+  overflow: auto;
 }
 
 #main-div {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 20px;
-  height: auto; 
-  overflow-y: auto; 
+  height: auto;
+  overflow-y: auto;
 }
 
 #achievement-list {
@@ -173,7 +175,7 @@ h2 {
 /* Mobile View */
 @media (max-width: 425px) {
   #main-div {
-    grid-template-columns: 1fr; 
+    grid-template-columns: 1fr;
     gap: 10px;
   }
 
@@ -182,28 +184,28 @@ h2 {
   }
 
   nav ul {
-    flex-direction: column; 
+    flex-direction: column;
     align-items: center;
   }
 
   nav a {
-    padding: 5px 0; 
+    padding: 5px 0;
   }
 
   #achievement-container,
   #item-container,
   #villager-container {
-    max-height: 150px;
+    max-height: 400px;
     padding: 15px;
     margin: 0px;
   }
 
   .footer {
-  text-align: center;
-  margin-top: 10px;
-  padding: 10px 0;
-  background-color: #f9f9f9;
-  flex-direction: row;
-}
+    text-align: center;
+    margin-top: 10px;
+    padding: 10px 0;
+    background-color: #f9f9f9;
+    flex-direction: row;
+  }
 }
 </style>

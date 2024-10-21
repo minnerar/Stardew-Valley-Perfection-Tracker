@@ -9,7 +9,7 @@
       >
         <div class="item-list-item">
           <div>{{ item.itemName }}</div>
-          <!-- <img :src="item.imageURL" /> -->
+          <img id="item-image" :src="item.imageURL" />
         </div>
       </li>
     </ul>
@@ -34,13 +34,7 @@ export default {
     itemView(id) {
       // push to the individual item page view
       this.$router.push({name: "item", params: {itemId: id}});
-    },
-    // isAdmin() {
-    //   return (
-    //     this.$store.state.user &&
-    //     this.$store.state.user.role.includes("ROLE_ADMIN")
-    //   );  
-    // },
+    }
   }
 }
 </script>
@@ -59,6 +53,10 @@ h2 {
   text-align: center;
   color: #2e8b57;
   margin-bottom: 20px;
+}
+
+#item-image {
+  max-width: 60px;
 }
 
 #item-list {
