@@ -1,7 +1,10 @@
 <template>
-  <div>
-    {{ currentTotalProgress() }}
-  </div>
+  <!-- <div class="progress-bar" role="progressbar" v-bind:aria-valuenow="currentCompletedAchievements/totalAchievements" aria-valuemin="0" aria-valuemax="totalAchievements" style="width:70%">
+  {{this.score}}
+  </div> -->
+  <!-- <div> -->
+    <!-- {{ currentCompletedAchievements / totalAchievements }} -->
+  <!-- </div> -->
   <div id="main-div">
     <div id="achievement-container">
       <achievement-list />
@@ -22,12 +25,17 @@ import { resourceService } from "../services/ResourceService.js";
 import AchievementList from "../components/AchievementList.vue";
 import ItemList from "../components/ItemList.vue";
 import VillagerList from "../components/VillagerList.vue";
+import { Store } from "vuex";
 
 export default {
   components: { AchievementList, ItemList, VillagerList },
   data() {
     return {
       isLoading: false,
+      totalCompleted: 0,
+      currentCompletedAchievements: 0,
+      totalAchievements: 0,
+      score: 0,
     };
   },
   created() {
@@ -51,16 +59,15 @@ export default {
         this.isLoading = false;
       }
     );
+    this.totalAchievements = this.$store.state.achievements.length;
+    this.currentCompletedAchievements = this.$store.state.achievements.find( achievement => {
+        return achievement.achievementCurrent = 1;
+      });
   },
   methods: {
     currentTotalProgress() {
       // calculates the current progress towards perfection (only including achievements)
-      let currentCompleted = this.$store.state.achievements.find(
-        (achievement) => {
-          return achievement.achievementProgress == 100;
-        }
-      );
-      // return currentCompleted.length / resourceService.achievements.length;
+      // return this.currentCompletedAchievements / this.totalAchievements;
     },
   },
   computed: {
@@ -72,15 +79,25 @@ export default {
         this.$store.state.user.role.includes("ROLE_ADMIN")
       );
     },
-  }
+  },
 };
 </script>
 
 <style>
+html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Prevent scrolling */
+}
+
 #main-div {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 20px; 
+  gap: 20px;
+  height: auto; /* Full height of the viewport */
+  overflow-y: auto; /* Allow scrolling inside the grid */
 }
 
 #achievement-list {
@@ -122,7 +139,7 @@ nav a {
 }
 
 .header-title {
-  font-size: 3em; 
+  font-size: 3em;
   color: #333;
   margin: 20px 0;
 }
@@ -130,24 +147,63 @@ nav a {
 #achievement-container,
 #item-container,
 #villager-container {
-  background-color: #ffffff; 
+  background-color: #ffffff;
   padding: 20px;
-  border-radius: 8px; 
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
-  max-height: 400px; 
-  overflow-y: auto; 
+  border-radius: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  max-height: 500px;
+  overflow-y: auto;
+  margin: 25px;
 }
 
 h2 {
-  text-align: center; 
-  color: #2e8b57; 
+  text-align: center;
+  color: #2e8b57;
   margin-bottom: 20px;
 }
 
 .footer {
   text-align: center;
   margin-top: 20px;
+  padding: 10px 10px;
+  background-color: #f9f9f9;
+  flex-direction: column;
+}
+
+/* Mobile View */
+@media (max-width: 425px) {
+  #main-div {
+    grid-template-columns: 1fr; /* Stack elements vertically */
+    gap: 10px;
+  }
+
+  .header-title {
+    font-size: 1em;
+  }
+
+  nav ul {
+    flex-direction: column; /* Stack navigation items */
+    align-items: center; /* Center navigation items */
+  }
+
+  nav a {
+    padding: 5px 0; /* Add some spacing between nav items */
+  }
+
+  #achievement-container,
+  #item-container,
+  #villager-container {
+    max-height: 150px; /* Adjust container height */
+    padding: 15px; /* Reduce padding for smaller screens */
+    margin: 0px;
+  }
+
+  .footer {
+  text-align: center;
+  margin-top: 10px;
   padding: 10px 0;
   background-color: #f9f9f9;
+  flex-direction: row;
+}
 }
 </style>

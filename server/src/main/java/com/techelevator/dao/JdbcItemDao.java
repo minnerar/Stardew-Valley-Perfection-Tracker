@@ -204,9 +204,9 @@ public class JdbcItemDao implements ItemDao {
     public int deleteItem(int id) {
         int numberOfRows = 0;
 
-        String deleteItemSql = "UPDATE item SET item_id = 0 WHERE item_id = ?";
-        String updateItemClassification = "UPDATE item_classification SET item_id = 0 WHERE item_id = ?";
-        String updateItemAchievement = "UPDATE achievement_item SET item_id = 0 WHERE item_id = ?";
+        String deleteItemSql = "DELETE FROM item WHERE item_id = ?";
+        String updateItemClassification = "DELETE FROM item_classification WHERE item_id = ?";
+        String updateItemAchievement = "DELETE FROM achievement_item WHERE item_id = ?";
 
         try {
             template.update(updateItemClassification, id);

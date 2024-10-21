@@ -71,7 +71,7 @@ public class AchievementController {
             Achievement updatedAchievement = achievementDao.getAchievementById(id);
             return achievementDao.deleteAchievementById(id);
         } catch (DaoException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Achievement Not Found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Achievement Not Found " + e.getMessage());
         }
 
     }

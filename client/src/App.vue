@@ -28,21 +28,27 @@
 </template>
 
 <style scoped>
-/* General Styling */
+* {
+  box-sizing: border-box; 
+}
+
+body {
+  margin: 0; 
+  overflow-x: hidden; 
+}
+
 #stardew-app {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
 }
 
-/* Header Styling */
 header {
   background-color: lightgreen;
   display: flex;
   flex-direction: column;
 }
 
-/* Navigation Styling */
 nav {
   display: flex;
   justify-content: flex-end;
@@ -50,7 +56,6 @@ nav {
   padding: 10px;
 }
 
-/* Header Content Styling */
 .header-content {
   display: flex;
   align-items: center;
@@ -75,7 +80,6 @@ main {
   justify-content: center; 
 }
 
-/* Footer Styling */
 footer {
   background-color: lightgreen;
   text-align: center; 
@@ -85,7 +89,6 @@ footer {
   align-items: center; 
 }
 
-/* Button Styling */
 button {
   padding: 0.75rem 1.5rem;
   background-color: white;
@@ -105,4 +108,28 @@ button:active {
 button:hover {
   background-color: lightgray;
 }
+
+/* Mobile View */
+@media (max-width: 425px) {
+  #app-title {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  #home-image {
+    height: 80px;
+    margin-right: 15px;
+  }
+
+  .header-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  button {
+    padding: 0.5rem 1rem; 
+    font-size: 0.9rem; 
+  }
+}
 </style>
+

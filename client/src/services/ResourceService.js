@@ -45,9 +45,6 @@ const resourceService = {
     updateVillagerById(villager) {
         return axios.put(`/villagers/${villager.villagerId}`, villager);
     },
-    deleteVillagerById(villager) {
-        return axios.delete(`/villagers/${villager.villagerId}`);
-    },
 
     // methods for Classifications  
     getClassifications() {

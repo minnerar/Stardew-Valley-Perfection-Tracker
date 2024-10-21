@@ -65,14 +65,21 @@
 
       <p>
         <strong v-if="isAdmin">Update Progress:</strong>
-        <button v-if="isAdmin" @click="decrement" :disabled="count === 0">
+        <button
+          v-if="isAdmin"
+          @click="decrement"
+          :disabled="achievement.achievementProgress === 0"
+        >
           -
         </button>
         <span v-if="isAdmin">{{ achievement.achievementProgress }}</span>
         <button
           v-if="isAdmin"
           @click="increment"
-          :disabled="count === achievement.achievementTotalNeeded"
+          :disabled="
+            achievement.achievementProgress ===
+            achievement.achievementTotalNeeded
+          "
         >
           +
         </button>
@@ -85,7 +92,7 @@
           </button>
         </div>
         <div>
-          <button v-if="isAdmin" @click="deleteAchievement(achievement.achievementId)">
+          <button v-if="isAdmin" @click="deleteAchievement(this.achievement)">
             DELETE
           </button>
         </div>
@@ -102,7 +109,6 @@ export default {
   data() {
     return {
       toggleStatus: false,
-      count: 0,
       isEditing: false,
       achievementObject: {
         achievementName: "",
@@ -111,7 +117,7 @@ export default {
         achievementTotalNeeded: 0,
         achievementCurrent: 0,
       },
-    }
+    };
   },
   created() {
     this.isLoading = true;
@@ -182,42 +188,38 @@ export default {
       // update the achievement
       resourceService.updateAchievementById(achievement);
     },
-    deleteAchievement(id) {
+    deleteAchievement(achievement) {
       // delete the achievement
-      resourceService.deleteAchievementById(id);
-      this.$router.push({
-        name: "home"
-      });
+      console.log(achievement);
+      resourceService.deleteAchievementById(achievement.achievementId);
+      this.$router.push({ name: "home" });
     },
     setProgress(input) {
       // set the achievement progress
       this.achievement.achievementProgress == input;
     },
     increment() {
-      if (this.count < this.achievement.achievementTotalNeeded) {
+      if (
+        this.achievement.achievementProgress <
+        this.achievement.achievementTotalNeeded
+      ) {
         // increment the counter
-        this.count++;
-
         // update in the database
         this.$store.commit("UPDATE_ACHIEVEMENT_PROGRESS", {
           achievement: this.achievement,
-          count: this.count,
+          count: this.achievement.achievementProgress + 1,
         });
-        this.achievement.achievementProgress = this.count;
         this.updateAchievement(this.achievement);
       }
     },
     decrement() {
-      if (this.count > 0) {
+      if (this.achievement.achievementProgress > 0) {
         // decrement the counter
-        this.count--;
-
         // update in the database
         this.$store.commit("UPDATE_ACHIEVEMENT_PROGRESS", {
           achievement: this.achievement,
-          count: this.count,
+          count: this.achievement.achievementProgress - 1,
         });
-        this.achievement.achievementProgress = this.count;
         this.updateAchievement(this.achievement);
       }
     },
@@ -242,6 +244,15 @@ export default {
 </script>
 
 <style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+}
+
 .achievement-detail {
   max-width: 600px;
   margin: 20px auto;
@@ -258,7 +269,7 @@ export default {
 
 .achievement-info img {
   max-width: 100%;
-  height: auto; /* Maintain aspect ratio */
+  height: auto;
   border-radius: 8px;
   margin-bottom: 15px;
   display: block;
@@ -310,5 +321,27 @@ button:hover:not(:disabled) {
 span {
   font-weight: bold;
   margin: 0 10px;
+}
+
+/* Mobile View */
+@media (max-width: 425px) {
+  .achievement-detail {
+    padding: 15px;
+    margin: 10px;
+    box-shadow: none;
+  }
+
+  .achievement-name {
+    font-size: 1.5em;
+  }
+
+  button {
+    font-size: 0.9em;
+    padding: 5px;
+  }
+
+  #achievement-image {
+    max-width: 100px;
+  }
 }
 </style>

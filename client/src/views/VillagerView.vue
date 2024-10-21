@@ -64,7 +64,6 @@ export default {
   // },
   methods: {
     increment() {
-      console.log("Increment method called");
       if (this.count < 10) {
         // increment the counter
         this.count++;
@@ -80,7 +79,6 @@ export default {
       }
     },
     decrement() {
-      console.log("Decrement method called");
       if (this.count > 0) {
         // decrement the counter
         this.count--;

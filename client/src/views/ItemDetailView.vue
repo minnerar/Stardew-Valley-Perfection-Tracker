@@ -85,7 +85,10 @@ export default {
       this.toggleStatus = !this.toggleStatus;
 
       // updating the completion status in the database
-      this.$store.commit("UPDATE_ITEM_COMPLETION", { item: this.item, status: this.toggleStatus });
+      this.$store.commit("UPDATE_ITEM_COMPLETION", {
+        item: this.item,
+        status: this.toggleStatus,
+      });
       this.item.itemCompleted = this.toggleStatus;
       this.updateItem(this.item);
     },
@@ -93,7 +96,7 @@ export default {
       // toggling the editing status
       this.isEditing = !this.isEditing;
 
-      // updating the itemObject values 
+      // updating the itemObject values
       if (this.isEditing) {
         // If entering edit mode, copy the current item's values to itemObject
         this.itemObject = {
@@ -104,7 +107,7 @@ export default {
           itemTime: this.item.itemTime,
           itemWeather: this.item.itemWeather,
           itemLocation: this.item.itemLocation,
-          itemCompleted: this.item.itemCompleted
+          itemCompleted: this.item.itemCompleted,
         };
       } else {
         // If exiting edit mode, update the current item with the values from itemObject
@@ -117,7 +120,7 @@ export default {
         this.itemObject.itemLocation = this.item.itemLocation;
         this.itemObject.itemCompleted = this.item.itemCompleted;
         this.itemObject.itemId = this.item.itemId;
-        
+
         // Save the updated item back to the store or API
         this.updateItem(this.itemObject);
       }
@@ -131,7 +134,7 @@ export default {
       // delete the item
       resourceService.deleteItemById(item.itemId);
       this.$router.push({
-        name: "home"
+        name: "home",
       });
     },
   },
@@ -177,6 +180,15 @@ export default {
 </script>
 
 <style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+}
+
 .item-detail {
   max-width: 600px;
   margin: 20px auto;
@@ -234,5 +246,28 @@ button:hover {
 
 strong {
   color: #333;
+}
+
+/* Mobile View for screens smaller than 425px */
+@media (max-width: 425px) {
+  .item-detail {
+    padding: 15px;
+    margin: 10px;
+    box-shadow: none;
+    font-size: 0.8em;
+  }
+
+  .item-name {
+    font-size: 1em;
+  }
+
+  button {
+    font-size: 0.9em;
+    padding: 8px 12px;
+  }
+
+  #item-image {
+    max-width: 100px;
+  }
 }
 </style>

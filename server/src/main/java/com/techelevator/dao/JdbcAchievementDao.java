@@ -102,7 +102,7 @@ public class JdbcAchievementDao implements AchievementDao {
     public int deleteAchievementById(int id) {
         int numberOfRows = 0;
         String deleteAchievementSql = "DELETE FROM achievement WHERE achievement_id = ?";
-        String updateItemAchievement = "UPDATE achievement_item SET achievement_id = 0 WHERE achievement_id = ?";
+        String updateItemAchievement = "DELETE FROM achievement_item WHERE achievement_id = ?";
         try {
             template.update(updateItemAchievement, id);
             numberOfRows = template.update(deleteAchievementSql, id);
