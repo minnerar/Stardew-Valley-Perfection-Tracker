@@ -89,15 +89,15 @@ html {
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden; /* Prevent scrolling */
+  overflow: hidden; 
 }
 
 #main-div {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 20px;
-  height: auto; /* Full height of the viewport */
-  overflow-y: auto; /* Allow scrolling inside the grid */
+  height: auto; 
+  overflow-y: auto; 
 }
 
 #achievement-list {
@@ -173,7 +173,7 @@ h2 {
 /* Mobile View */
 @media (max-width: 425px) {
   #main-div {
-    grid-template-columns: 1fr; /* Stack elements vertically */
+    grid-template-columns: 1fr; 
     gap: 10px;
   }
 
@@ -182,19 +182,19 @@ h2 {
   }
 
   nav ul {
-    flex-direction: column; /* Stack navigation items */
-    align-items: center; /* Center navigation items */
+    flex-direction: column; 
+    align-items: center;
   }
 
   nav a {
-    padding: 5px 0; /* Add some spacing between nav items */
+    padding: 5px 0; 
   }
 
   #achievement-container,
   #item-container,
   #villager-container {
-    max-height: 150px; /* Adjust container height */
-    padding: 15px; /* Reduce padding for smaller screens */
+    max-height: 150px;
+    padding: 15px;
     margin: 0px;
   }
 
