@@ -35,7 +35,7 @@ export function createStore(currentToken, currentUser) {
         state.achievement = achievement;
       },
       UPDATE_ACHIEVEMENT_COMPLETION(state, payload) {
-        payload.achievement.achievementCurrent == payload.toggleStatus;
+        payload.achievement.achievementCurrent == payload.achievementTotalNeeded;
       },
       UPDATE_ACHIEVEMENT_PROGRESS(state, payload) {
         payload.achievement.achievementProgress == payload.count;
@@ -50,7 +50,7 @@ export function createStore(currentToken, currentUser) {
         state.villagers = villagers;
       },
       UPDATE_VILLAGER_HEART_COUNTER(state, payload) {
-        payload.villager.villagerHeartCounter == payload.villagerHeartCounter;
+        payload.villager.villagerHeartCounter == payload.count;
       },
       SET_CLASSIFICATIONS(state, classifications) {
         state.classifications = classifications;

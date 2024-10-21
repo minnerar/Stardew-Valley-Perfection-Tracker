@@ -1,7 +1,7 @@
 <template>
   <div class="achievement-detail">
     <div class="achievement-info">
-      <img :src="achievement.imageURL" />
+      <img :src="achievement.imageURL" id="achievement-image" />
       <h2 class="achievement-name">
         <template v-if="isEditing">
           <input
@@ -85,7 +85,7 @@
           </button>
         </div>
         <div>
-          <button v-if="isAdmin" @click="deleteAchievement(achievement)">
+          <button v-if="isAdmin" @click="deleteAchievement(achievement.achievementId)">
             DELETE
           </button>
         </div>
@@ -97,6 +97,7 @@
 
 <script>
 import { resourceService } from "../services/ResourceService";
+
 export default {
   data() {
     return {
@@ -110,7 +111,29 @@ export default {
         achievementTotalNeeded: 0,
         achievementCurrent: 0,
       },
-    };
+    }
+  },
+  created() {
+    this.isLoading = true;
+    Promise.all([
+      resourceService.getAchievements(),
+      resourceService.getItems(),
+      resourceService.getVillagers(),
+      resourceService.getClassifications(),
+    ]).then(
+      ([
+        achievementResponse,
+        itemResponse,
+        villagerResponse,
+        classificationResponse,
+      ]) => {
+        this.$store.commit("SET_ACHIEVEMENTS", achievementResponse.data);
+        this.$store.commit("SET_ITEMS", itemResponse.data);
+        this.$store.commit("SET_VILLAGERS", villagerResponse.data);
+        this.$store.commit("SET_CLASSIFICATIONS", classificationResponse.data);
+        this.isLoading = false;
+      }
+    );
   },
   methods: {
     toggleAchievementStatus() {
@@ -159,9 +182,12 @@ export default {
       // update the achievement
       resourceService.updateAchievementById(achievement);
     },
-    deleteAchievement(achievement) {
+    deleteAchievement(id) {
       // delete the achievement
-      resourceService.deleteAchievementById(achievement.achievementId);
+      resourceService.deleteAchievementById(id);
+      this.$router.push({
+        name: "home"
+      });
     },
     setProgress(input) {
       // set the achievement progress
@@ -175,7 +201,7 @@ export default {
         // update in the database
         this.$store.commit("UPDATE_ACHIEVEMENT_PROGRESS", {
           achievement: this.achievement,
-          count: this.count
+          count: this.count,
         });
         this.achievement.achievementProgress = this.count;
         this.updateAchievement(this.achievement);
@@ -186,10 +212,10 @@ export default {
         // decrement the counter
         this.count--;
 
-        // update in the database 
+        // update in the database
         this.$store.commit("UPDATE_ACHIEVEMENT_PROGRESS", {
           achievement: this.achievement,
-          count: this.count
+          count: this.count,
         });
         this.achievement.achievementProgress = this.count;
         this.updateAchievement(this.achievement);
@@ -254,6 +280,10 @@ p {
 
 strong {
   color: #333;
+}
+
+#achievement-image {
+  max-width: 175px;
 }
 
 button {

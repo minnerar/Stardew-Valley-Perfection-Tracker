@@ -47,7 +47,7 @@ public class VillagerController {
     @PutMapping(path = "/{id}")
     public Villager updatedVillager(@RequestBody @Valid Villager villager, @PathVariable int id) {
         try {
-            Villager updatedVillager = villagerDao.updateVillager(villager);
+//            Villager updatedVillager = villagerDao.updateVillager(villager);
             return villagerDao.updateVillager(villager);
         } catch (DaoException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Villager Not Found");

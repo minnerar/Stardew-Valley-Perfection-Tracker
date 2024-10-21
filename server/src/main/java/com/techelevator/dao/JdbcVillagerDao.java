@@ -115,13 +115,13 @@ public class JdbcVillagerDao implements VillagerDao {
         Villager updatedVillager = null;
         String sql = "UPDATE villager SET villager_id = ?, name = ?, marriage_candidate = ?, birthday = ?, loved1 = ?, loved2 = ?, loved3 = ?," +
                 "loved4 = ?, loved5 = ?, loved6 = ?, loved7 = ?, loved8 = ?, loved9 = ?, loved10 = ?," +
-                "loved11 = ?, loved12 = ?, description = ? WHERE villager_id = ?";
+                "loved11 = ?, loved12 = ?, description = ?, heartCounter = ? WHERE villager_id = ?";
         List<String> loved = villager.getVillagerLovedGifts();
         // added loved gifts to a new List<String> so that they can be pulled and added to the updated villager
         try {
             int rowsAffected = template.update(sql, villager.getVillagerId(), villager.getVillagerName(), villager.isVillagerMarriageCandidate(),
                     villager.getVillagerBirthday(), loved.get(0), loved.get(1), loved.get(2), loved.get(3), loved.get(4), loved.get(5),
-                    loved.get(6),loved.get(7),loved.get(8),loved.get(9),loved.get(10),loved.get(11), villager.getVillagerDescription(), villager.getVillagerId());
+                    loved.get(6),loved.get(7),loved.get(8),loved.get(9),loved.get(10),loved.get(11), villager.getVillagerDescription(), villager.getVillagerHeartCounter(), villager.getVillagerId());
             if (rowsAffected == 0) {
                 throw new DaoException("Zero rows affected, expected at least one.");
             }
@@ -174,6 +174,7 @@ public class JdbcVillagerDao implements VillagerDao {
         villager.setVillagerLovedGifts(lovedGifts);
         villager.setVillagerDescription(results.getString("description"));
         villager.setImageURL(results.getString("imageURL"));
+        villager.setVillagerHeartCounter(results.getInt("heartCounter"));
         return villager;
     }
 }

@@ -12,7 +12,7 @@ const resourceService = {
         return axios.post('/achievements', achievement);
     },
     updateAchievementById(achievement) {
-        return axios.put(`/achievements/${achievement.id}`, achievement);
+        return axios.put(`/achievements/${achievement.achievementId}`, achievement);
     },
     deleteAchievementById(id) {
         return axios.delete(`/achievements/${id}`);
@@ -43,10 +43,10 @@ const resourceService = {
         return axios.get(`/villagers/${id}`);
     },
     updateVillagerById(villager) {
-        return axios.put(`/villagers/${villager.id}`, villager);
+        return axios.put(`/villagers/${villager.villagerId}`, villager);
     },
     deleteVillagerById(villager) {
-        return axios.delete(`/villagers/${villager.id}`);
+        return axios.delete(`/villagers/${villager.villagerId}`);
     },
 
     // methods for Classifications  

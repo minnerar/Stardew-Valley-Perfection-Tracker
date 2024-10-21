@@ -79,7 +79,7 @@ export default {
 <style>
 #main-div {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 20px; 
 }
 
@@ -125,12 +125,6 @@ nav a {
   font-size: 3em; 
   color: #333;
   margin: 20px 0;
-}
-
-#main-div {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px; 
 }
 
 #achievement-container,

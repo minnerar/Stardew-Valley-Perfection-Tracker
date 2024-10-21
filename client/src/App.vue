@@ -11,7 +11,7 @@
         <a href="https://www.nexusmods.com/stardewvalley" class="button"><button>MODS</button></a>
       </nav>
       <div class="header-content">
-        <img id="home-image" src="src/assets/stardew-main-logo.png" alt="src/assets/main-image-alt.png"/>
+        <img id="home-image" src="../src/assets/stardew-main-logo.png" alt="src/assets/main-image-alt.png"/>
         <h1 id="app-title">PERFECTION TRACKER</h1>
       </div>
     </header>
@@ -21,7 +21,7 @@
     </main>
 
     <footer>
-      <div><img id="footer-img" src="src/assets/Developed_By_Image_small.gif" /></div>
+      <div><img id="footer-img" src="../src/assets/Developed_By_Image_small.gif" /></div>
       &copy; 2024 All Rights Reserved
     </footer>
   </div>

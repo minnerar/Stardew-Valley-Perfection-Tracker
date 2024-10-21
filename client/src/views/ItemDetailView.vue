@@ -1,7 +1,7 @@
 <template>
   <div class="item-detail">
     <div class="item-info">
-      <img :src="item.imageURL" />
+      <img :src="item.imageURL" id="item-image" />
       <h2 class="item-name">
         <span v-if="isEditing"> Name: <input v-model="item.itemName" /> </span>
         <span v-else>{{ item.itemName }}</span>
@@ -44,15 +44,6 @@
         </span>
         <span v-else>{{ item.itemLocation ? item.itemLocation : "N/A" }}</span>
       </p>
-      <p>
-        <strong>Classification:</strong>
-        <span v-if="isEditing">
-          <input v-model="item.classification" />
-        </span>
-        <span v-else>{{
-          item.classification ? item.classification : "N/A"
-        }}</span>
-      </p>
     </div>
     <div class="button-container" v-if="isAdmin">
       <div>
@@ -69,6 +60,7 @@
 
 <script>
 import { resourceService } from "../services/ResourceService";
+
 export default {
   data() {
     return {
@@ -82,7 +74,8 @@ export default {
         itemTime: "",
         itemWeather: "",
         itemLocation: "",
-        classification: "",
+        itemCompleted: false,
+        itemId: 999,
       },
     };
   },
@@ -111,30 +104,35 @@ export default {
           itemTime: this.item.itemTime,
           itemWeather: this.item.itemWeather,
           itemLocation: this.item.itemLocation,
-          classification: this.item.classification,
+          itemCompleted: this.item.itemCompleted
         };
       } else {
         // If exiting edit mode, update the current item with the values from itemObject
-        this.item.imageURL = this.itemObject.imageURL;
-        this.item.itemName = this.itemObject.itemName;
-        this.item.itemDescription = this.itemObject.itemDescription;
-        this.item.itemSeason = this.itemObject.itemSeason;
-        this.item.itemTime = this.itemObject.itemTime;
-        this.item.itemWeather = this.itemObject.itemWeather;
-        this.item.itemLocation = this.itemObject.itemLocation;
-        this.item.classification = this.itemObject.classification;
-
+        this.itemObject.imageURL = this.item.imageURL;
+        this.itemObject.itemName = this.item.itemName;
+        this.itemObject.itemDescription = this.item.itemDescription;
+        this.itemObject.itemSeason = this.item.itemSeason;
+        this.itemObject.itemTime = this.item.itemTime;
+        this.itemObject.itemWeather = this.item.itemWeather;
+        this.itemObject.itemLocation = this.item.itemLocation;
+        this.itemObject.itemCompleted = this.item.itemCompleted;
+        this.itemObject.itemId = this.item.itemId;
+        
         // Save the updated item back to the store or API
-        this.updateItem(this.item);
+        this.updateItem(this.itemObject);
       }
     },
     updateItem(item) {
+      console.log(item);
       // update the item
       resourceService.updateItemById(item);
     },
     deleteItem(item) {
       // delete the item
       resourceService.deleteItemById(item.itemId);
+      this.$router.push({
+        name: "home"
+      });
     },
   },
   computed: {
@@ -152,6 +150,28 @@ export default {
         this.$store.state.user.role.includes("ROLE_ADMIN")
       );
     },
+  },
+  created() {
+    this.isLoading = true;
+    Promise.all([
+      resourceService.getAchievements(),
+      resourceService.getItems(),
+      resourceService.getVillagers(),
+      resourceService.getClassifications(),
+    ]).then(
+      ([
+        achievementResponse,
+        itemResponse,
+        villagerResponse,
+        classificationResponse,
+      ]) => {
+        this.$store.commit("SET_ACHIEVEMENTS", achievementResponse.data);
+        this.$store.commit("SET_ITEMS", itemResponse.data);
+        this.$store.commit("SET_VILLAGERS", villagerResponse.data);
+        this.$store.commit("SET_CLASSIFICATIONS", classificationResponse.data);
+        this.isLoading = false;
+      }
+    );
   },
 };
 </script>
@@ -191,6 +211,10 @@ p {
   color: #555;
   line-height: 1.6;
   margin: 5px 0;
+}
+
+#item-image {
+  max-width: 175px;
 }
 
 button {
